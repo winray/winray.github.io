@@ -1,3 +1,3 @@
 # winray.github.io
 Blog For Study
-[Click here](winray.github.io)
+[Click here](http://winray.github.io)
