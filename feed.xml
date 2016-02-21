@@ -5,8 +5,8 @@
     <description>For study!</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 21 Feb 2016 19:41:32 +0800</pubDate>
-    <lastBuildDate>Sun, 21 Feb 2016 19:41:32 +0800</lastBuildDate>
+    <pubDate>Sun, 21 Feb 2016 19:44:44 +0800</pubDate>
+    <lastBuildDate>Sun, 21 Feb 2016 19:44:44 +0800</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
     
       <item>
@@ -295,11 +295,13 @@
 &lt;ul&gt;
   &lt;li&gt;用C++开发的时候，用来做基类的类的析构函数一般都是虚函数
     &lt;ul&gt;
-      &lt;li&gt;这样做是为了当用一个基类的指针删除一个派生类的对象时，派生类的析构函数会被调用。&lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;这样做是为了当用一个基类的指针删除一个派生类的对象时，派生类的析构函数会被调用。&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;然而，不是所有类的析构函数都要写成虚函数。因为当类里面有虚函数的时候，编译器会给类添加一个虚函数表，里面来存放虚函数指针，这样会增加类的存储空间。故，只有当一个类被用来作为基类的时候，才把析构函数写成虚函数。&lt;/p&gt;
+      &lt;/li&gt;
     &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;然而，不是所有类的析构函数都要写成虚函数。因为当类里面有虚函数的时候，编译器会给类添加一个虚函数表，里面来存放虚函数指针，这样会增加类的存储空间。故，只有当一个类被用来作为基类的时候，才把析构函数写成虚函数。&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;关于多态：
     &lt;ul&gt;
