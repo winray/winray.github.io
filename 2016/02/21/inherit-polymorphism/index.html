@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" /> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="For study!">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+    <title>C++继承与多态 - Winray | Winray Blog</title>
+
+    <link rel="canonical" href="/2016/02/21/inherit-polymorphism/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="http://cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Winray Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/article/">Article</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/tags/">Tags</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#c++" title="c++">c++</a>
+                        
+                    </div>
+                    <h1>C++继承与多态</h1>
+                    
+                    
+                    <h2 class="subheading">For study!</h2>
+                    
+                    <span class="meta">Posted by Winray on February 21, 2016</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+				<ul>
+  <li>继承（Inheritance）
+    <ul>
+      <li>允许在保持原有类特性的基础上进行扩展，增加功能。这样产生的新类称为“派生类”。继承呈现了面向对象程序设计的层次结构，体现了人类对现实世界由简单到复杂的认识过程。</li>
+    </ul>
+  </li>
+  <li>多态性（Polymorphism）
+    <ul>
+      <li>包括静态的多态性和动态的多态性。前者亦称编译时的多态性，包括函数重载和运算符重载。多态体现了类推和比喻的思想方法。</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="section">继承</h4>
+<ul>
+  <li>
+    <p>被继承的类型称为基类（base class）或超类（superclass），新产生的类为派生类（derived class）或子类（subclass）。基类和派生类的集合称作类继承层次结构（hierarchy）。如果基类和派生类共享相同的公有接口，则派生类被称作类的子类型（subtype）。</p>
+  </li>
+  <li>
+    <p>继承机制体现了现实世界的层次结构，如下图所示。</p>
+  </li>
+</ul>
+
+<p><img src="/img/blog/1.gif" alt="" /></p>
+
+<ul>
+  <li>单一继承（single-inheritance） ：一个派生类只有一个直接基类。</li>
+  <li>多重继承（multiple-inheritance） ：一个派生类可以同时有多个基类。</li>
+</ul>
+
+<h6 id="section-1">编制派生类的步骤</h6>
+<ol>
+  <li>吸收基类的成员：不论是数据成员，还是函数成员，除构造函数与析构函数外全盘接收（继承方式）。</li>
+  <li>改造基类成员：声明一个和某基类成员同名的新成员，该新成员将屏蔽基类同名成员。称为同名覆盖（override）
+    <ul>
+      <li>新成员若是成员函数，参数表也必须一样，否则是重载。</li>
+    </ul>
+  </li>
+  <li>发展新成员：派生类新成员必须与基类成员不同名，它的加入保证派生类在功能上有所发展。</li>
+  <li>重写构造函数与析构函数。</li>
+</ol>
+
+<h6 id="section-2">公有派生与私有派生</h6>
+<ul>
+  <li>
+    <p>派生类定义时的访问限定符，是指访问控制，亦称为继承方式，用于在派生类中对基类成员进一步的限制。</p>
+  </li>
+  <li>
+    <p>访问控制也是三种：公有（public）方式，保护（protected）方式和私有（private）方式，相应的继承亦称公有继承、保护继承和私有继承。访问限定有两方面含义：</p>
+    <ul>
+      <li>派生类新增成员函数对基类（继承来的）成员的访问；</li>
+      <li>从派生类对象之外对派生类对象中的基类成员的访问。</li>
+    </ul>
+  </li>
+</ul>
+
+<h6 id="section-3">虚基类</h6>
+<ul>
+  <li>关键字：<code class="highlighter-rouge">virtual</code></li>
+  <li>类A派生出类B和类C，类D继承自类B和类C，这个时候类A中的成员变量和成员函数继承到类D中变成了两份，一份来自 A–&gt;B–&gt;D 这一路，另一份来自 A–&gt;C–&gt;D 这一条路。</li>
+</ul>
+
+<p><img src="/img/blog/2.png" alt="" /></p>
+
+<ul>
+  <li>为了解决这个问题，C++提供了虚基类，使得在派生类中只保留间接基类的一份成员。</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1">#include &lt;iostream&gt;</span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">A</span><span class="p">{</span>
+<span class="ss">protected:
+	</span><span class="n">int</span> <span class="n">a</span><span class="p">;</span>
+<span class="ss">public:
+    </span><span class="no">A</span><span class="p">(</span><span class="n">int</span> <span class="n">a</span><span class="p">)</span><span class="ss">:a</span><span class="p">(</span><span class="n">a</span><span class="p">){}</span>
+<span class="p">};</span>
+<span class="k">class</span> <span class="nc">B</span><span class="p">:</span> <span class="n">virtual</span> <span class="kp">public</span> <span class="no">A</span><span class="p">{</span>  <span class="sr">//</span><span class="err">声明虚基类</span>
+<span class="ss">protected:
+    </span><span class="n">int</span> <span class="n">b</span><span class="p">;</span>
+<span class="ss">public:
+    </span><span class="no">B</span><span class="p">(</span><span class="n">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">int</span> <span class="n">b</span><span class="p">)</span><span class="ss">:A</span><span class="p">(</span><span class="n">a</span><span class="p">),</span><span class="n">b</span><span class="p">(</span><span class="n">b</span><span class="p">){}</span>
+<span class="p">};</span>
+<span class="k">class</span> <span class="nc">C</span><span class="p">:</span> <span class="n">virtual</span> <span class="kp">public</span> <span class="no">A</span><span class="p">{</span>  <span class="sr">//</span><span class="err">声明虚基类</span>
+<span class="ss">protected:
+    </span><span class="n">int</span> <span class="n">c</span><span class="p">;</span>
+<span class="ss">public:
+    </span><span class="no">C</span><span class="p">(</span><span class="n">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">int</span> <span class="n">c</span><span class="p">)</span><span class="ss">:A</span><span class="p">(</span><span class="n">a</span><span class="p">),</span><span class="n">c</span><span class="p">(</span><span class="n">c</span><span class="p">){}</span>
+<span class="p">};</span>
+<span class="k">class</span> <span class="nc">D</span><span class="p">:</span> <span class="n">virtual</span> <span class="kp">public</span> <span class="no">B</span><span class="p">,</span> <span class="n">virtual</span> <span class="kp">public</span> <span class="no">C</span><span class="p">{</span>  <span class="sr">//</span><span class="err">声明虚基类</span>
+<span class="ss">private:
+    </span><span class="n">int</span> <span class="n">d</span><span class="p">;</span>
+<span class="ss">public:
+    </span><span class="no">D</span><span class="p">(</span><span class="n">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">int</span> <span class="n">b</span><span class="p">,</span> <span class="n">int</span> <span class="n">c</span><span class="p">,</span> <span class="n">int</span> <span class="n">d</span><span class="p">)</span><span class="ss">:A</span><span class="p">(</span><span class="n">a</span><span class="p">),</span><span class="no">B</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">),</span><span class="no">C</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">c</span><span class="p">),</span><span class="n">d</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="n">void</span> <span class="nb">display</span><span class="p">();</span>
+<span class="p">};</span>
+
+<span class="n">void</span> <span class="no">D</span><span class="o">::</span><span class="nb">display</span><span class="p">(){</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">"a="</span> <span class="o">&lt;&lt;</span> <span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">"b="</span> <span class="o">&lt;&lt;</span> <span class="n">b</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">"c="</span> <span class="o">&lt;&lt;</span> <span class="n">c</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">"d="</span> <span class="o">&lt;&lt;</span> <span class="n">d</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">int</span> <span class="n">main</span><span class="p">(){</span>
+    <span class="p">(</span><span class="kp">new</span> <span class="no">D</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="nb">display</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>结果如下：</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">a</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">b</span><span class="o">=</span><span class="mi">2</span>
+<span class="n">c</span><span class="o">=</span><span class="mi">3</span>
+<span class="n">d</span><span class="o">=</span><span class="mi">4</span></code></pre></figure>
+
+<h4 id="section-4">多态</h4>
+<ul>
+  <li>
+    <p>C++中，实现多态有以下方法：虚函数，抽象类，覆盖，模板（重载和多态无关）。</p>
+  </li>
+  <li>在C++中有两种多态性：
+    <ul>
+      <li>编译时的多态性：通过函数的重载和运算符的重载来实现的。</li>
+      <li>运行时的多态性：在程序执行前，无法根据函数名和参数来确定该调用哪一个函数，必须在程序执行过程中，根据具体情况来动态地确定。它是通过类继承关系和虚函数来实现的,目的也是建立一种通用的程序。</li>
+    </ul>
+  </li>
+  <li>虚函数是一个类的成员函数，定义格式：<code class="highlighter-rouge">virtual 返回类型 函数名（参数表）;</code>
+    <ul>
+      <li>当在派生类中重新定义虚函数（overriding a virtual function，亦译作超载或覆盖）时，不必加关键字virtual。但重新定义时不仅要同名，而且它的参数表和返回类型全部与基类中的虚函数一样，否则联编时出错。</li>
+      <li>只有类的成员函数才能说明为虚函数。这是因为虚函数仅适用于有继承关系的类对象。</li>
+      <li>静态成员函数，是所有同类对象共有，不受限于某个对象，不能作为虚函数。</li>
+      <li>内联函数每个对象一个拷贝，无映射关系，不能作为虚函数。</li>
+      <li>析构函数可定义为虚函数，构造函数不能定义虚函数，因为在构造函数时对象还没有完成实例化。在基类中及其派生类中都动态分配的内存空间时，必须把析构函数定义为虚函数，实现撤消对象时的多态性。</li>
+      <li>虚函数执行速度要稍慢一些。因为，为了实现多态性，每一个派生类中均要保存相应虚函数的入口地址表，函数的调用机制也是间接实现。所以多态性总是要付出一定代价，但通用性是一个更高的目标。</li>
+      <li><strong>为了方便，你可以只将基类中的函数声明为虚函数，所有派生类中具有覆盖关系的同名函数都将自动成为虚函数。</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1">#include &lt;iostream&gt;</span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">A</span> <span class="p">{</span>
+    <span class="ss">public: </span><span class="no">A</span><span class="p">()</span> <span class="p">{}</span>
+    <span class="n">virtual</span> <span class="n">void</span> <span class="n">foo</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">"This is A."</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">B</span><span class="p">:</span> <span class="kp">public</span> <span class="no">A</span> <span class="p">{</span>
+    <span class="ss">public: </span><span class="no">B</span><span class="p">()</span> <span class="p">{}</span>
+    <span class="n">void</span> <span class="n">foo</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">"This is B."</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">int</span> <span class="n">main</span><span class="p">(</span><span class="n">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">char</span> <span class="o">*</span> <span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+    <span class="no">A</span> <span class="o">*</span> <span class="n">a</span> <span class="o">=</span> <span class="kp">new</span> <span class="no">B</span><span class="p">();</span>
+    <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">foo</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">!=</span> <span class="no">NULL</span><span class="p">)</span>
+        <span class="n">delete</span> <span class="n">a</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="sr">//ou</span><span class="n">tput</span><span class="ss">:This</span> <span class="n">is</span> <span class="no">B</span><span class="o">.</span></code></pre></figure>
+
+<h6 id="section-5">函数多态</h6>
+<blockquote>
+  <p>也就是我们常说的函数重载（function overloading）。基于不同的参数列表，同一个函数名字可以指向不同的函数定义：</p>
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1">#include &lt;iostream&gt;</span>
+<span class="c1">#include &lt;string&gt;</span>
+
+<span class="n">int</span> <span class="n">my_add</span><span class="p">(</span><span class="n">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span> <span class="sr">//</span><span class="err">定义两个重载函数</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">int</span> <span class="n">my_add</span><span class="p">(</span><span class="n">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">atoi</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="nf">c_str</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="n">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">my_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span> <span class="sr">//</span> <span class="err">两个整数相加</span>
+    <span class="n">int</span> <span class="n">s</span> <span class="o">=</span> <span class="n">my_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"2"</span><span class="p">);</span> <span class="sr">//</span> <span class="err">一个整数和一个字符串相加</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">"i = "</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">"s = "</span> <span class="o">&lt;&lt;</span> <span class="n">s</span> <span class="o">&lt;&lt;</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<h6 id="section-6">宏多态</h6>
+<ul>
+  <li>带变量的宏可以实现一种初级形式的静态多态：</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1">#include &lt;iostream&gt;</span>
+<span class="c1">#include &lt;string&gt;</span>
+
+<span class="c1">#define ADD(A, B) (A) + (B); // 定义泛化记号：宏ADD</span>
+
+<span class="n">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">int</span> <span class="n">i1</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">i2</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s1</span><span class="p">(</span><span class="s2">"Hello, "</span><span class="p">),</span> <span class="n">s2</span><span class="p">(</span><span class="s2">"world!"</span><span class="p">);</span>
+	<span class="n">int</span> <span class="n">i</span> <span class="o">=</span> <span class="no">ADD</span><span class="p">(</span><span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">);</span>                  <span class="sr">//</span> <span class="err">两个整数相加</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s</span> <span class="o">=</span> <span class="no">ADD</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">);</span>          <span class="sr">//</span> <span class="err">两个字符串“相加”</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">"i = "</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">"s = "</span> <span class="o">&lt;&lt;</span> <span class="n">s</span> <span class="o">&lt;&lt;</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<h6 id="section-7">动态多态 &amp;&amp; 静态多态</h6>
+<ul>
+  <li>动态多态，众所周知的多态，使用虚函数构建</li>
+  <li>静态多态，使用模版构建</li>
+</ul>
+
+<h6 id="section-8">抽象类的纯虚函数</h6>
+<blockquote>
+  <p>纯虚函数是在基类中声明的虚函数，它在基类中没有定义，但要求任何派生类都要定义自己的实现方法。在基类中实现纯虚函数的方法是在函数原型后加”=0” ，同 java中抽象方法类似<code class="highlighter-rouge">virtual void funtion1()=0</code>。<strong>C++接口使用抽象类来实现</strong></p>
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1">#include &lt;iostream&gt;</span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+ 
+<span class="sr">//</span> <span class="no">Base</span> <span class="k">class</span>
+<span class="k">class</span> <span class="nc">Shape</span> 
+<span class="p">{</span>
+<span class="ss">public:
+   </span><span class="n">virtual</span> <span class="n">int</span> <span class="n">getArea</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  <span class="sr">//</span><span class="n">pure</span> <span class="n">virtual</span> <span class="n">function</span> <span class="n">providing</span> <span class="n">interface</span> <span class="n">framework</span><span class="p">.</span>
+   <span class="nf">void</span> <span class="n">setWidth</span><span class="p">(</span><span class="n">int</span> <span class="n">w</span><span class="p">)</span>
+   <span class="p">{</span>
+      <span class="n">width</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>
+   <span class="p">}</span>
+   <span class="n">void</span> <span class="n">setHeight</span><span class="p">(</span><span class="n">int</span> <span class="n">h</span><span class="p">)</span>
+   <span class="p">{</span>
+      <span class="n">height</span> <span class="o">=</span> <span class="n">h</span><span class="p">;</span>
+   <span class="p">}</span>
+<span class="ss">protected:
+   </span><span class="n">int</span> <span class="n">width</span><span class="p">;</span>
+   <span class="n">int</span> <span class="n">height</span><span class="p">;</span>
+<span class="p">};</span>
+ 
+<span class="sr">//</span> <span class="no">Derived</span> <span class="n">classes</span>
+<span class="k">class</span> <span class="nc">Rectangle</span><span class="p">:</span> <span class="kp">public</span> <span class="no">Shape</span>
+<span class="p">{</span>
+<span class="ss">public:
+   </span><span class="n">int</span> <span class="n">getArea</span><span class="p">()</span>
+   <span class="p">{</span> 
+      <span class="k">return</span> <span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="n">height</span><span class="p">);</span> 
+   <span class="p">}</span>
+<span class="p">};</span>
+<span class="k">class</span> <span class="nc">Triangle</span><span class="p">:</span> <span class="kp">public</span> <span class="no">Shape</span>
+<span class="p">{</span>
+<span class="ss">public:
+   </span><span class="n">int</span> <span class="n">getArea</span><span class="p">()</span>
+   <span class="p">{</span> 
+      <span class="k">return</span> <span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="n">height</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span> 
+   <span class="p">}</span>
+<span class="p">};</span>
+ 
+<span class="n">int</span> <span class="n">main</span><span class="p">(</span><span class="n">void</span><span class="p">)</span>
+<span class="p">{</span>
+   <span class="no">Rectangle</span> <span class="no">Rect</span><span class="p">;</span>
+   <span class="no">Triangle</span>  <span class="no">Tri</span><span class="p">;</span>
+ 
+   <span class="no">Rect</span><span class="p">.</span><span class="nf">setWidth</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+   <span class="no">Rect</span><span class="p">.</span><span class="nf">setHeight</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
+   <span class="sr">//</span> <span class="no">Print</span> <span class="n">the</span> <span class="n">area</span> <span class="n">of</span> <span class="n">the</span> <span class="n">object</span><span class="p">.</span>
+   <span class="nf">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">"Total Rectangle area: "</span> <span class="o">&lt;&lt;</span> <span class="no">Rect</span><span class="p">.</span><span class="nf">getArea</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+   <span class="no">Tri</span><span class="p">.</span><span class="nf">setWidth</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+   <span class="no">Tri</span><span class="p">.</span><span class="nf">setHeight</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
+   <span class="sr">//</span> <span class="no">Print</span> <span class="n">the</span> <span class="n">area</span> <span class="n">of</span> <span class="n">the</span> <span class="n">object</span><span class="p">.</span>
+   <span class="nf">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">"Total Triangle area: "</span> <span class="o">&lt;&lt;</span> <span class="no">Tri</span><span class="p">.</span><span class="nf">getArea</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> 
+
+   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>这将产生以下结果：</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Total</span> <span class="no">Rectangle</span> <span class="ss">area: </span><span class="mi">35</span>
+<span class="no">Total</span> <span class="no">Triangle</span> <span class="ss">area: </span><span class="mi">17</span></code></pre></figure>
+
+<h4 id="tips">Tips</h4>
+<ul>
+  <li>用C++开发的时候，用来做基类的类的析构函数一般都是虚函数
+    <ul>
+      <li>这样做是为了当用一个基类的指针删除一个派生类的对象时，派生类的析构函数会被调用。</li>
+    </ul>
+  </li>
+  <li>
+    <p>然而，不是所有类的析构函数都要写成虚函数。因为当类里面有虚函数的时候，编译器会给类添加一个虚函数表，里面来存放虚函数指针，这样会增加类的存储空间。故，只有当一个类被用来作为基类的时候，才把析构函数写成虚函数。</p>
+  </li>
+  <li>关于多态：
+    <ul>
+      <li>编译时：模板、重载</li>
+      <li>运行时：通过虚表</li>
+      <li>运行时多态相关的概念：静态类型、动态类型。</li>
+    </ul>
+  </li>
+</ul>
+
+
+                <hr>
+
+                
+                <!-- 多说 Share start -->
+                </style>
+                <div class="ds-share"
+                    style="text-align: right"
+                    data-thread-key="/2016/02/21/inherit-polymorphism"
+                    data-title="C++继承与多态"
+                    data-url="/2016/02/21/inherit-polymorphism/"
+                    data-images="/img/home-bg.jpg"
+                    data-content="
+  继承（Inheritance）
+    
+      允许在保持原有类特性的基础上进行扩展，增加功能。这样产生的新类称为“派生类”。继承呈现了面向对... | Winray | Winray Blog " >
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2016/02/19/Hello-World/" data-toggle="tooltip" data-placement="top" title="Hello World">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="/2016/02/21/inherit-polymorphism"
+                        data-title="C++继承与多态"
+                        data-url="/2016/02/21/inherit-polymorphism/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+        				
+                            
+        				
+                            
+        				
+                            
+        				
+                            
+        				
+        			</div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'alve';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+
+                    <!-- add Weibo, Zhihu by Hux, add target = "_blank" to <a> by Hux -->
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/winray">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/3693851230">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/winray">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Winray Blog 2016
+                    <br>
+                    Theme by <a href="http://winray.github.io ">Winray</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=winray&repo=winray.github.io&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+        hljs.initHighlightingOnLoad();
+    })
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+<!--fastClick.js -->
+<script>
+    async("http://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+<!--  -->
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '619784f38dc59844eb4205c0dc389ccc';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+<!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0" /> -->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
