@@ -5,9 +5,160 @@
     <description>For study!</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 21 Feb 2016 23:15:44 +0800</pubDate>
-    <lastBuildDate>Sun, 21 Feb 2016 23:15:44 +0800</lastBuildDate>
+    <pubDate>Mon, 22 Feb 2016 19:41:06 +0800</pubDate>
+    <lastBuildDate>Mon, 22 Feb 2016 19:41:06 +0800</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
+    
+      <item>
+        <title>Linux常用命令</title>
+        <description>&lt;h6 id=&quot;man&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;man&lt;/code&gt;可以用于提供命令解释&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;如&lt;code class=&quot;highlighter-rouge&quot;&gt;man ls&lt;/code&gt;可以查看ls相关用法&lt;/li&gt;
+  &lt;li&gt;按&lt;code class=&quot;highlighter-rouge&quot;&gt;q&lt;/code&gt;键或者&lt;code class=&quot;highlighter-rouge&quot;&gt;ctrl+c&lt;/code&gt;退出，在linux可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;ctrl+c&lt;/code&gt;终止当前程序的运行&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;ls&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ls&lt;/code&gt;查看目录或者文件，可以是当前目录，也可以指定一个目录&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ls -l&lt;/code&gt;列出详细信息
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;d&lt;/code&gt;表示目录&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-&lt;/code&gt;表示文件&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;l&lt;/code&gt;表示文件链接&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;r&lt;/code&gt;表示可读&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;w&lt;/code&gt;表示可写&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt;表示可运行&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;cp&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;cp&lt;/code&gt;拷贝文件/文件夹&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;文件：&lt;code class=&quot;highlighter-rouge&quot;&gt;cp filename1 filename2&lt;/code&gt;：把filename1拷贝成filename2&lt;/li&gt;
+  &lt;li&gt;目录：&lt;code class=&quot;highlighter-rouge&quot;&gt;cp -r filename1 filename2&lt;/code&gt;：把filename1拷贝成filename2&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;rm&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;rm&lt;/code&gt;删除文件/文件夹&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;文件：&lt;code class=&quot;highlighter-rouge&quot;&gt;rm filename&lt;/code&gt;：将filename这个文件删除&lt;/li&gt;
+  &lt;li&gt;目录：&lt;code class=&quot;highlighter-rouge&quot;&gt;rm -r filename&lt;/code&gt;：将filename这个文件夹删除&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;mv&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;mv&lt;/code&gt;移走目录或者改文件名&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;改名：&lt;code class=&quot;highlighter-rouge&quot;&gt;mv filename1 filename2&lt;/code&gt;：将filename1 改名为filename2&lt;/li&gt;
+  &lt;li&gt;移走：&lt;code class=&quot;highlighter-rouge&quot;&gt;mv filename ./des/&lt;/code&gt;：将filename移到当前目录下的des目录&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;cd&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;cd&lt;/code&gt;进入/退出目录&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;进入：&lt;code class=&quot;highlighter-rouge&quot;&gt;cd ./des/&lt;/code&gt;：进入到当前目录下的des目录&lt;/li&gt;
+  &lt;li&gt;退出：&lt;code class=&quot;highlighter-rouge&quot;&gt;cd ..&lt;/code&gt;：返回上一级目录
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;cd&lt;/code&gt;：返回到`/home/usr&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;pwd&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pwd&lt;/code&gt;查看当前目录所在路径&lt;/h6&gt;
+
+&lt;h6 id=&quot;catmore&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;cat&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;more&lt;/code&gt;命令&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;cat把文件内容一直打印出来，&lt;code class=&quot;highlighter-rouge&quot;&gt;cat filename&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;more则分屏显示，&lt;code class=&quot;highlighter-rouge&quot;&gt;more filename&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;cat&amp;gt;filename&lt;/code&gt;可以把代码粘帖到filename，按ctrl+d 保存代码。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;chmod&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;chmod&lt;/code&gt;命令&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;chmod u+x filenmame&lt;/code&gt;,只想给自己运行，别人只能读
+    &lt;ul&gt;
+      &lt;li&gt;u表示文件主人， g 表示文件文件所在组。 o 表示其他人 ;r 表可读，w 表可写，x 表可以运行&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;section&quot;&gt;时间&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;date&lt;/code&gt;显示日期和时间&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;cal&lt;/code&gt;显示本月日历&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;clear&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;clear&lt;/code&gt;清屏&lt;/h6&gt;
+
+&lt;h6 id=&quot;mount&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;mount&lt;/code&gt;加载一个硬件设备&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;用法:mount [参数] 要加载的设备 载入点
+    &lt;ul&gt;
+      &lt;li&gt;比如&lt;code class=&quot;highlighter-rouge&quot;&gt;mount /dev/cdrom&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;su&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;su&lt;/code&gt;命令&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;su&lt;/code&gt;在不退出登陆的情况下，切换到另外一个人的身份&lt;/li&gt;
+  &lt;li&gt;用法: su -l 用户名(如果用户名缺省，则切换到root状态)
+    &lt;ul&gt;
+      &lt;li&gt;比如&lt;code class=&quot;highlighter-rouge&quot;&gt;su -l netseek&lt;/code&gt;，切换到netseek这个用户，将提示输入密码&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;whoami&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;whoami&lt;/code&gt;&lt;/h6&gt;
+&lt;p&gt;确认自己身份&lt;/p&gt;
+
+&lt;h6 id=&quot;whereis&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;whereis&lt;/code&gt;&lt;/h6&gt;
+&lt;p&gt;查询命令所在目录以及帮助文档所在目录&lt;/p&gt;
+
+&lt;h6 id=&quot;which&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;which&lt;/code&gt;&lt;/h6&gt;
+&lt;p&gt;查询该命令所在目录&lt;/p&gt;
+
+&lt;h6 id=&quot;section-1&quot;&gt;查找命令&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;grep&lt;/code&gt;:文本内容搜索
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;grep success *&lt;/code&gt;查找当前目录下面所有文件里面含有success字符的文件&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;find&lt;/code&gt;:文件或者目录名以及权限属主等匹配搜索
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;find success *&lt;/code&gt;查找所有文件里面含有success字符的文件或者目录名&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;section-2&quot;&gt;进程&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ps&lt;/code&gt;查看当前运行中的进程&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;kill ID&lt;/code&gt;结束某个进程&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;section-3&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;!!&lt;/code&gt;执行最后以此命令&lt;/h6&gt;
+
+&lt;h6 id=&quot;mkdir&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;mkdir&lt;/code&gt;命令&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;mkdir file&lt;/code&gt;创建file这个目录&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;tips&quot;&gt;Tips&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;gcc file.c&lt;/li&gt;
+  &lt;li&gt;g++ file.cpp&lt;/li&gt;
+  &lt;li&gt;python file.py&lt;/li&gt;
+  &lt;li&gt;bash file.sh&lt;/li&gt;
+  &lt;li&gt;vim&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;sudo apt-get install&lt;/code&gt;安装软件&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        <pubDate>Mon, 22 Feb 2016 00:00:00 +0800</pubDate>
+        <link>/2016/02/22/linux/</link>
+        <guid isPermaLink="true">/2016/02/22/linux/</guid>
+        
+        <category>linux</category>
+        
+        
+      </item>
     
       <item>
         <title>C++继承与多态</title>
