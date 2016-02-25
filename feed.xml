@@ -5,9 +5,147 @@
     <description>For study!</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 23 Feb 2016 12:20:37 +0800</pubDate>
-    <lastBuildDate>Tue, 23 Feb 2016 12:20:37 +0800</lastBuildDate>
+    <pubDate>Fri, 26 Feb 2016 00:48:27 +0800</pubDate>
+    <lastBuildDate>Fri, 26 Feb 2016 00:48:27 +0800</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
+    
+      <item>
+        <title>C++中的函数指针和函数对象</title>
+        <description>&lt;h4 id=&quot;section&quot;&gt;函数指针&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;函数指针：是指向函数的指针变量，在C编译时，每一个函数都有一个入口地址，那么这个指向这个函数的函数指针便指向这个地址。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;函数指针的用途是很大的，主要有两个作用：用作调用函数和做函数的参数。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;section-1&quot;&gt;函数指针的声明方法：&lt;/h6&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;数据类型标志符 （指针变量名） （形参列表）；
+一般函数的声明为: 
+int func ( int x );
+而一个函数指针的声明方法为：
+int (*func) (int x);  //(*func)中括号是必要的
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;然而这样的声明非常繁琐，typedef可以简化声明，比如：&lt;code class=&quot;highlighter-rouge&quot;&gt;typedef int (*PF) (int x);&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;PF pf;&lt;/code&gt;此时pf便是一个函数指针。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;typedef void (*PFT) ( char ,int );
+void bar(char ch, int i)
+{
+    cout&amp;lt;&amp;lt;&quot;bar &quot;&amp;lt;&amp;lt;ch&amp;lt;&amp;lt;&#39; &#39;&amp;lt;&amp;lt;i&amp;lt;&amp;lt;endl;
+    return ;
+}
+PFT pft;
+pft = bar;
+pft(&#39;e&#39;,91);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h6 id=&quot;section-2&quot;&gt;函数指针作为参数&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;函数指针另一个作用便是作为函数的参数，我们可以在一个函数的形参列表中传入一个函数指针，然后便可以在这个函数中使用这个函数指针所指向的函数，这样便可以使程序变得更加清晰和简洁，而且这种用途技巧可以帮助我们解决很多棘手的问题，使用很小的代价就可获得足够大的利益（速度+复杂度）。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;typedef void (*PFT) ( char ,int );
+void bar(char ch, int i)
+{
+    cout&amp;lt;&amp;lt;&quot;bar &quot;&amp;lt;&amp;lt;ch&amp;lt;&amp;lt;&#39; &#39;&amp;lt;&amp;lt;i&amp;lt;&amp;lt;endl;
+    return ;
+}
+void foo(char ch, int i, PFT pf)
+{
+    pf(ch,i);
+    return ;
+}
+PFT pft;
+pft = bar;
+foo(&#39;e&#39;,12,pft);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;section-3&quot;&gt;函数对象&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;，函数对象使程序设计更加灵活，而且能够实现函数的内联（inline）调用，使整个程序实现性能加速。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;函数对象：这里已经说明了这是一个对象，而且实际上只是这个对象具有的函数的某些功能，我们才称之为函数对象，意义很贴切，如果一个对象具有了某个函数的功能，我们变可以称之为函数对象。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;如何使对象具有函数功能呢，只需要为这个对象的操作符()进行重载就可以了，如下：&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class A{
+public:
+int operator()(int x){return x;}
+};
+A a;
+a(5);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;当我们想在形参列表中调用某个函数时，可以先声明一个具有这种函数功能的函数对象，然后在形参中使用这个对象，他所作的功能和函数指针所作的功能是相同的，而且更加安全。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class Func{
+public:
+    int operator() (int a, int b)
+    {
+        cout&amp;lt;&amp;lt;a&amp;lt;&amp;lt;&#39;+&#39;&amp;lt;&amp;lt;b&amp;lt;&amp;lt;&#39;=&#39;&amp;lt;&amp;lt;a+b&amp;lt;&amp;lt;endl;
+        return a;
+    }
+};
+int addFunc(int a, int b, Func&amp;amp; func)
+{
+    func(a,b);
+    return a;
+}
+Func func;
+addFunc(1,3,func);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;如果运用泛型思维来考虑，可以定一个函数模板类，来实现一般类型的数据的相加：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class FuncT{
+public:
+    template&amp;lt;typename T&amp;gt;
+    T operator() (T t1, T t2)
+    {
+        cout&amp;lt;&amp;lt;t1&amp;lt;&amp;lt;&#39;+&#39;&amp;lt;&amp;lt;t2&amp;lt;&amp;lt;&#39;=&#39;&amp;lt;&amp;lt;t1+t2&amp;lt;&amp;lt;endl;
+        return t1;
+    }
+};
+template &amp;lt;typename T&amp;gt;
+T addFuncT(T t1, T t2, FuncT&amp;amp; funct)
+{
+    funct(t1,t2);
+    return t1;
+}
+FuncT funct;
+addFuncT(2,4,funct);
+addFuncT(1.4,2.3,funct);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+</description>
+        <pubDate>Thu, 25 Feb 2016 00:00:00 +0800</pubDate>
+        <link>/2016/02/25/pointer/</link>
+        <guid isPermaLink="true">/2016/02/25/pointer/</guid>
+        
+        <category>c++</category>
+        
+        
+      </item>
     
       <item>
         <title>Sicily 1153.马的周游问题 解题报告</title>
