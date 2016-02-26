@@ -10,9 +10,9 @@
     <meta name="keyword"  content="">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>Hello World - Winray | Winray Blog</title>
+    <title>C++11新特性 - Winray | Winray Blog</title>
 
-    <link rel="canonical" href="/2016/02/19/Hello-World/">
+    <link rel="canonical" href="/2016/02/26/cpp11/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -140,17 +140,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#记录" title="记录">记录</a>
-                        
-                        <a class="tag" href="/tags/#版本" title="版本">版本</a>
+                        <a class="tag" href="/tags/#c++" title="c++">c++</a>
                         
                     </div>
-                    <h1>Hello World</h1>
+                    <h1>C++11新特性</h1>
                     
                     
-                    <h2 class="subheading"> "Hello World, Hello Blog"</h2>
+                    <h2 class="subheading">For study!</h2>
                     
-                    <span class="meta">Posted by Winray on February 19, 2016</span>
+                    <span class="meta">Posted by Winray on February 26, 2016</span>
                 </div>
             </div>
         </div>
@@ -168,20 +166,290 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				<h5 id="v10">v1.0</h5>
+				<h4 id="c11">c++11简介</h4>
 <ul>
-  <li>初始版本</li>
-  <li>修改自<a href="http://huangxuan.me/">Hux Blog</a>,万分感谢</li>
-  <li>让我试试Markdown代码，来个python的”hello world”:</li>
+  <li>
+    <p><code class="highlighter-rouge">C++11</code>不仅包含核心语言的新机能，而且扩展了<code class="highlighter-rouge">C++</code>的标准程序库（<code class="highlighter-rouge">STL</code>），并入了大部分的<code class="highlighter-rouge">C++ Technical Report 1（TR1）</code>程序库(数学的特殊函数除外)。</p>
+  </li>
+  <li>
+    <p>C++11包括大量的新特性：包括lambda表达式，类型推导关键字auto、decltype，和模板的大量改进。</p>
+  </li>
 </ul>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"> <span class="c1">#python</span>
- <span class="nb">print</span> <span class="s2">"hello world"</span></code></pre></figure>
-
-<h5 id="v11">v1.1</h5>
+<h5 id="auto">auto</h5>
 <ul>
-  <li>增加了多说评论分享系统</li>
+  <li>在新标准中，它的功能变为类型推断。<code class="highlighter-rouge">auto</code>现在成了一个类型的占位符，通知编译器去根据初始化代码推断所声明变量的真实类型。各种作用域内声明变量都可以用到它。例如，名空间中，程序块中，或是for循环的初始化语句中。</li>
 </ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>auto i = 42; // i is an int
+auto l = 42LL; // l is an long long
+auto p = new foo(); // p is a foo*
+</code></pre>
+</div>
+
+<ul>
+  <li>使用auto通常意味着更短的代码。当你遍历STL容器时需要声明的那些迭代器（<code class="highlighter-rouge">iterator</code>）。现在不需要去声明那些typedef就可以得到简洁的代码了。</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>std::map&lt;std::string, std::vector&lt;int&gt;&gt; map;
+for(auto it = begin(map); it != end(map); ++it){}
+</code></pre>
+</div>
+
+<ul>
+  <li>需要注意的是，auto不能用来声明函数的返回值。但如果函数有一个尾随的返回类型时，<code class="highlighter-rouge">auto</code>是可以出现在函数声明中返回值位置。这种情况下，auto并不是告诉编译器去推断返回类型，而是指引编译器去函数的末端寻找返回值类型。在下面这个例子中，函数的返回值类型就是operator+操作符作用在T1、T2类型变量上的返回值类型。</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>template &lt; typename T1, typename T2 &gt;
+auto compose(T1 t1, T2 t2)‐ &gt; decltype(t1 + t2) {
+    return t1 + t2;
+}
+auto v = compose(2, 3.14);  // v's type is double
+</code></pre>
+</div>
+
+<h6 id="nullptr">nullptr</h6>
+<ul>
+  <li>
+    <p>以前都是用0来表示空指针的，但由于0可以被隐式类型转换为整形，这就会存在一些问题。关键字<code class="highlighter-rouge">nullptr</code>是<code class="highlighter-rouge">std::nullptr_t</code>类型的值，用来指代空指针。nullptr和任何指针类型以及类成员指针类型的空值之间可以发生隐式类型转换，同样也可以隐式转换为bool型（取值为false）。但是不存在到整形的隐式类型转换。</p>
+  </li>
+  <li>
+    <p>为了向前兼容，0仍然是个合法的空指针值。</p>
+  </li>
+</ul>
+
+<h6 id="range-based-for-loops-for">Range-based for loops （基于范围的for循环）</h6>
+<ul>
+  <li>为了在遍历容器时支持”foreach”用法，C++11扩展了for语句的语法。用这个新的写法，可以遍历C类型的数组、初始化列表以及任何重载了非成员的begin()和end()函数的类型。</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>std::map&lt;std::string, std::vector&lt;int&gt; &gt; map;
+std::vector &lt;int&gt; v;
+v.push_back(1);
+v.push_back(2);
+v.push_back(3);
+map["one"] = v;
+for (const auto &amp; kvp: map) {
+    std::cout &lt;&lt; kvp.first &lt;&lt; std::endl;
+    for (auto v: kvp.second) {
+        std::cout &lt;&lt; v &lt;&lt; std::endl;
+    }
+}
+int arr[] = { 1, 2, 3, 4, 5 };
+for (int &amp; e: arr) {
+    e = e * e;
+}
+</code></pre>
+</div>
+
+<h6 id="overridefinal">Override和final</h6>
+<ul>
+  <li><code class="highlighter-rouge">override</code>，表示函数应当重写基类中的虚函数。</li>
+  <li><code class="highlighter-rouge">final</code>，表示派生类不应当重写这个虚函数。</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>class B {
+    public:
+        virtual void f(short) { std::cout &lt;&lt; "B::f" &lt;&lt; std::endl; }
+};
+class D: public B {
+    public:
+        virtual void f(int) override { std::cout &lt;&lt; "D::f" &lt;&lt; std::endl; }
+};
+</code></pre>
+</div>
+
+<ul>
+  <li>这将触发一个编译错误,而不会重载函数。</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>class B {
+    public:
+        virtual void f(int) { std::cout &lt;&lt; "B::f" &lt;&lt; std::endl; }
+};
+class D: public B {
+    public:
+        virtual void f(int) override final { std::cout &lt;&lt; "D::f" &lt;&lt; std::endl; }
+};
+class F: public D {
+    public:
+        virtual void f(int) override { std::cout &lt;&lt; "F::f" &lt;&lt; std::endl; }
+};
+</code></pre>
+</div>
+
+<ul>
+  <li>被标记成<code class="highlighter-rouge">final</code>的函数将不能再被F::f重写。</li>
+</ul>
+
+<h6 id="strongly-typed-enums-">Strongly-typed enums 强类型枚举</h6>
+<ul>
+  <li>
+    <p>传统的C++枚举类型存在一些缺陷：它们会将枚举常量暴露在外层作用域中（这可能导致名字冲突，如果同一个作用域中存在两个不同的枚举类型，但是具有相同的枚举常量就会冲突），而且它们会被隐式转换为整形，无法拥有特定的用户定义类型。</p>
+  </li>
+  <li>
+    <p>在C++11中通过引入了一个称为强类型枚举的新类型，修正了这种情况。强类型枚举由关键字<code class="highlighter-rouge">enum class</code>标识。它不会将枚举常量暴露到外层作用域中，也不会隐式转换为整形，并且拥有用户指定的特定类型（传统枚举也增加了这个性质）。</p>
+  </li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>enum class Options {None, One, All};
+Options o = Options::All;
+</code></pre>
+</div>
+
+<h6 id="smart-pointers-">Smart Pointers 智能指针</h6>
+<ul>
+  <li>
+    <p>现在能使用的，带引用计数，并且能自动释放内存的智能指针包括以下几种：</p>
+
+    <ul>
+      <li>unique_ptr: 如果内存资源的所有权不需要共享，就应当使用这个（它没有拷贝构造函数），但是它可以转让给另一个unique_ptr（存在move构造函数）。</li>
+      <li>shared_ptr: 如果内存资源需要共享，那么使用这个（所以叫这个名字）。</li>
+      <li>weak_ptr: 持有被shared_ptr所管理对象的引用，但是不会改变引用计数值。它被用来打破依赖循环（想象在一个tree结构中，父节点通过一个共享所有权的引用(chared_ptr)引用子节点，同时子节点又必须持有父节点的引用。如果这第二个引用也共享所有权，就会导致一个循环，最终两个节点内存都无法释放）。</li>
+    </ul>
+  </li>
+  <li>
+    <p>另一方面，<code class="highlighter-rouge">auto_ptr</code>已经被废弃，不会再使用了。</p>
+  </li>
+  <li>
+    <p>以下第一个例子使用了<code class="highlighter-rouge">unique_ptr</code>。如果你想把对象所有权转移给另一个unique_ptr，需要使用std::move（我会在最后几段讨论这个函数）。在所有权转移后，交出所有权的智能指针将为空，get()函数将返回<code class="highlighter-rouge">nullptr</code>。</p>
+  </li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>void foo(int *p) {
+    std::cout &lt;&lt; *p &lt;&lt; std::endl;
+}
+std::unique_ptr &lt;int&gt; p1(new int(42));
+std::unique_ptr &lt;int&gt; p2 = std::move(p1);
+// transfer ownership
+if (p1)
+    foo(p1.get());
+(*p2)++;
+if (p2)
+    foo(p2.get());
+</code></pre>
+</div>
+
+<ul>
+  <li>第二个例子展示了shared_ptr。用法相似，但语义不同，此时所有权是共享的。</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>void foo(int* p){}
+void bar(std::shared_ptr&lt;int&gt; p) {
+    ++(*p);
+}
+std::shared_ptr&lt;int&gt; p1(new int(42));
+std::shared_ptr&lt;int&gt; p2 = p1;
+bar(p1);
+foo(p2.get());
+</code></pre>
+</div>
+
+<p>第一个声明和以下这行是等价的：<code class="highlighter-rouge">auto p3 = std::make_shared&lt;int&gt;(42);</code></p>
+
+<ul>
+  <li><code class="highlighter-rouge">make_shared&lt;T&gt;</code>是一个非成员函数，使用它的好处是可以一次性分配共享对象和智能指针自身的内存。而显示地使用shared_ptr构造函数来构造则至少需要两次内存分配。除了会产生额外的开销，还可能会导致内存泄漏。在下面这个例子中，如果<code class="highlighter-rouge">seed()</code>抛出一个错误就会产生内存泄漏。</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>void foo(std::shared_ptr&lt;int&gt; p, int init)
+{
+    *p = init;
+}
+foo(std::shared_ptr&lt;int&gt;(new int(42)), seed());
+</code></pre>
+</div>
+
+<ul>
+  <li>如果使用make_shared就不会有这个问题了。第三个例子展示了weak_ptr。注意，你必须调用lock()来获得被引用对象的shared_ptr，通过它才能访问这个对象。</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>auto p = std::make_shared&lt;int&gt;(42);
+std::weak_ptr&lt;int&gt; wp = p;
+{
+	auto sp = wp.lock();
+	std::cout &lt;&lt; *sp &lt;&lt; std::endl;
+} 
+p.reset();
+if(wp.expired())
+    std::cout &lt;&lt; "expired" &lt;&lt; std::endl;
+</code></pre>
+</div>
+
+<ul>
+  <li>如果你试图锁定(lock)一个过期（指被弱引用对象已经被释放）的weak_ptr，那你将获得一个空的shared_ptr.</li>
+</ul>
+
+<h6 id="lambdas">Lambdas</h6>
+<ul>
+  <li>匿名函数（也叫<code class="highlighter-rouge">lambda</code>）已经加入到<code class="highlighter-rouge">C++</code>中，并很快异军突起。这个从函数式编程中借来的强大特性，使很多其他特性以及类库得以实现。你可以在任何使用函数对象或者函子(functor)或std::function的地方使用lambda。</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>std::vector &lt; int &gt; v;
+v.push_back(1);
+v.push_back(2);
+v.push_back(3);
+std::for_each(std::begin(v), std::end(v), [](int n) { std::cout &lt;&lt; n &lt;&lt; std::endl; });
+auto is_odd = [](int n) {
+    return n % 2 == 1;
+};
+auto pos = std::find_if(std::begin(v), std::end(v), is_odd);
+if (pos != std::end(v))
+    std::cout &lt;&lt; * pos &lt;&lt; std::endl;
+</code></pre>
+</div>
+
+<ul>
+  <li>
+    <p>更复杂的是递归lambda。考虑一个实现Fibonacci函数的lambda。如果你试图用auto来声明，就会得到一个编译错误。</p>
+  </li>
+  <li>
+    <p>问题出在<code class="highlighter-rouge">auto</code>意味着对象类型由初始表达式决定，然而初始表达式又包含了对其自身的引用，因此要求先知道它的类型，这就导致了无穷递归。解决问题的关键就是打破这种循环依赖，用<code class="highlighter-rouge">std::function</code>显式的指定函数类型：</p>
+  </li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>function&lt;int(int)&gt; fib = [&amp;fib](int n) {return n &lt; 2 ? 1 : fib(n-1) + fib(n-2);};
+</code></pre>
+</div>
+
+<h6 id="beginend">非成员begin()和end()</h6>
+<ul>
+  <li>他们是新加入标准库的，除了能提高了代码一致性，还有助于更多地使用泛型编程。它们和所有的STL容器兼容。更重要的是，他们是可重载的。所以它们可以被扩展到支持任何类型。对C类型数组的重载已经包含在标准库中了。</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>int arr[] = {1,2,3};
+std::for_each(std::begin(arr), std::end(arr), [](int n) {std::cout &lt;&lt; n &lt;&lt; std::endl;});
+auto is_odd = [](int n) {return n%2==1;};
+auto pos = std::find_if(std::begin(arr), std::end(arr), is_odd);
+if(pos != std::end(arr))
+std::cout &lt;&lt; *pos &lt;&lt; std::endl;
+</code></pre>
+</div>
+
+<h6 id="staticassert-type-traits">static_assert和 type traits</h6>
+<ul>
+  <li><code class="highlighter-rouge">static_assert</code>提供一个编译时的断言检查。如果断言为真，什么也不会发生。如果断言为假，编译器会打印一个特殊的错误信息。</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>template &lt;typename T, size_t Size&gt;
+class Vector
+{
+	static_assert(Size &lt; 3, "Size is too small");
+	T _points[Size];
+};
+int main()
+{
+	Vector&lt;int, 16&gt; a1;
+	Vector&lt;double, 2&gt; a2;
+	return 0;
+}
+</code></pre>
+</div>
+
+<h6 id="move-semantics-move">Move semantics （Move语义）</h6>
+<ul>
+  <li>C++11加入了右值引用(rvalue reference)的概念（用&amp;&amp;标识），用来区分对左值和右值的引用。左值就是一个有名字的对象，而右值则是一个无名对象（临时对象）。move语义允许修改右值（以前右值被看作是不可修改的，等同于const T&amp;类型）。</li>
+</ul>
+
 
 
                 <hr>
@@ -191,18 +459,14 @@
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="/2016/02/19/Hello-World"
-                    data-title="Hello World"
-                    data-url="/2016/02/19/Hello-World/"
+                    data-thread-key="/2016/02/26/cpp11"
+                    data-title="C++11新特性"
+                    data-url="/2016/02/26/cpp11/"
                     data-images="/img/home-bg.jpg"
-                    data-content="v1.0
+                    data-content="c++11简介
 
-  初始版本
-  修改自Hux Blog,万分感谢
-  让我试试Markdown代码，来个python的”hello world”:
-
-
- #... | Winray | Winray Blog " >
+  
+    C++11不仅包含核心语言的新机能，而且扩展了C++的标准程序库（STL），并入了大部分的C++ Technical Re... | Winray | Winray Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -222,13 +486,9 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/jekyll/update/2016/02/17/welcome-to-jekyll/" data-toggle="tooltip" data-placement="top" title="Welcome to Jekyll!">&larr; Previous Post</a>
+                        <a href="/2016/02/25/pointer/" data-toggle="tooltip" data-placement="top" title="C++中的函数指针和函数对象">&larr; Previous Post</a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2016/02/21/copy/" data-toggle="tooltip" data-placement="top" title="c++深拷贝与浅拷贝">Next Post &rarr;</a>
-                    </li>
                     
                 </ul>
 
@@ -237,9 +497,9 @@
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="/2016/02/19/Hello-World"
-                        data-title="Hello World"
-                        data-url="/2016/02/19/Hello-World/" >
+                        data-thread-key="/2016/02/26/cpp11"
+                        data-title="C++11新特性"
+                        data-url="/2016/02/26/cpp11/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->

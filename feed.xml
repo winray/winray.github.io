@@ -5,9 +5,305 @@
     <description>For study!</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 26 Feb 2016 00:48:27 +0800</pubDate>
-    <lastBuildDate>Fri, 26 Feb 2016 00:48:27 +0800</lastBuildDate>
+    <pubDate>Fri, 26 Feb 2016 14:28:00 +0800</pubDate>
+    <lastBuildDate>Fri, 26 Feb 2016 14:28:00 +0800</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
+    
+      <item>
+        <title>C++11新特性</title>
+        <description>&lt;h4 id=&quot;c11&quot;&gt;c++11简介&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;C++11&lt;/code&gt;不仅包含核心语言的新机能，而且扩展了&lt;code class=&quot;highlighter-rouge&quot;&gt;C++&lt;/code&gt;的标准程序库（&lt;code class=&quot;highlighter-rouge&quot;&gt;STL&lt;/code&gt;），并入了大部分的&lt;code class=&quot;highlighter-rouge&quot;&gt;C++ Technical Report 1（TR1）&lt;/code&gt;程序库(数学的特殊函数除外)。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;C++11包括大量的新特性：包括lambda表达式，类型推导关键字auto、decltype，和模板的大量改进。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&quot;auto&quot;&gt;auto&lt;/h5&gt;
+&lt;ul&gt;
+  &lt;li&gt;在新标准中，它的功能变为类型推断。&lt;code class=&quot;highlighter-rouge&quot;&gt;auto&lt;/code&gt;现在成了一个类型的占位符，通知编译器去根据初始化代码推断所声明变量的真实类型。各种作用域内声明变量都可以用到它。例如，名空间中，程序块中，或是for循环的初始化语句中。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;auto i = 42; // i is an int
+auto l = 42LL; // l is an long long
+auto p = new foo(); // p is a foo*
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;使用auto通常意味着更短的代码。当你遍历STL容器时需要声明的那些迭代器（&lt;code class=&quot;highlighter-rouge&quot;&gt;iterator&lt;/code&gt;）。现在不需要去声明那些typedef就可以得到简洁的代码了。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;std::map&amp;lt;std::string, std::vector&amp;lt;int&amp;gt;&amp;gt; map;
+for(auto it = begin(map); it != end(map); ++it){}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;需要注意的是，auto不能用来声明函数的返回值。但如果函数有一个尾随的返回类型时，&lt;code class=&quot;highlighter-rouge&quot;&gt;auto&lt;/code&gt;是可以出现在函数声明中返回值位置。这种情况下，auto并不是告诉编译器去推断返回类型，而是指引编译器去函数的末端寻找返回值类型。在下面这个例子中，函数的返回值类型就是operator+操作符作用在T1、T2类型变量上的返回值类型。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;template &amp;lt; typename T1, typename T2 &amp;gt;
+auto compose(T1 t1, T2 t2)‐ &amp;gt; decltype(t1 + t2) {
+    return t1 + t2;
+}
+auto v = compose(2, 3.14);  // v&#39;s type is double
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h6 id=&quot;nullptr&quot;&gt;nullptr&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;以前都是用0来表示空指针的，但由于0可以被隐式类型转换为整形，这就会存在一些问题。关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;nullptr&lt;/code&gt;是&lt;code class=&quot;highlighter-rouge&quot;&gt;std::nullptr_t&lt;/code&gt;类型的值，用来指代空指针。nullptr和任何指针类型以及类成员指针类型的空值之间可以发生隐式类型转换，同样也可以隐式转换为bool型（取值为false）。但是不存在到整形的隐式类型转换。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;为了向前兼容，0仍然是个合法的空指针值。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;range-based-for-loops-for&quot;&gt;Range-based for loops （基于范围的for循环）&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;为了在遍历容器时支持”foreach”用法，C++11扩展了for语句的语法。用这个新的写法，可以遍历C类型的数组、初始化列表以及任何重载了非成员的begin()和end()函数的类型。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;std::map&amp;lt;std::string, std::vector&amp;lt;int&amp;gt; &amp;gt; map;
+std::vector &amp;lt;int&amp;gt; v;
+v.push_back(1);
+v.push_back(2);
+v.push_back(3);
+map[&quot;one&quot;] = v;
+for (const auto &amp;amp; kvp: map) {
+    std::cout &amp;lt;&amp;lt; kvp.first &amp;lt;&amp;lt; std::endl;
+    for (auto v: kvp.second) {
+        std::cout &amp;lt;&amp;lt; v &amp;lt;&amp;lt; std::endl;
+    }
+}
+int arr[] = { 1, 2, 3, 4, 5 };
+for (int &amp;amp; e: arr) {
+    e = e * e;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h6 id=&quot;overridefinal&quot;&gt;Override和final&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;override&lt;/code&gt;，表示函数应当重写基类中的虚函数。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;final&lt;/code&gt;，表示派生类不应当重写这个虚函数。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class B {
+    public:
+        virtual void f(short) { std::cout &amp;lt;&amp;lt; &quot;B::f&quot; &amp;lt;&amp;lt; std::endl; }
+};
+class D: public B {
+    public:
+        virtual void f(int) override { std::cout &amp;lt;&amp;lt; &quot;D::f&quot; &amp;lt;&amp;lt; std::endl; }
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;这将触发一个编译错误,而不会重载函数。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class B {
+    public:
+        virtual void f(int) { std::cout &amp;lt;&amp;lt; &quot;B::f&quot; &amp;lt;&amp;lt; std::endl; }
+};
+class D: public B {
+    public:
+        virtual void f(int) override final { std::cout &amp;lt;&amp;lt; &quot;D::f&quot; &amp;lt;&amp;lt; std::endl; }
+};
+class F: public D {
+    public:
+        virtual void f(int) override { std::cout &amp;lt;&amp;lt; &quot;F::f&quot; &amp;lt;&amp;lt; std::endl; }
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;被标记成&lt;code class=&quot;highlighter-rouge&quot;&gt;final&lt;/code&gt;的函数将不能再被F::f重写。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;strongly-typed-enums-&quot;&gt;Strongly-typed enums 强类型枚举&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;传统的C++枚举类型存在一些缺陷：它们会将枚举常量暴露在外层作用域中（这可能导致名字冲突，如果同一个作用域中存在两个不同的枚举类型，但是具有相同的枚举常量就会冲突），而且它们会被隐式转换为整形，无法拥有特定的用户定义类型。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;在C++11中通过引入了一个称为强类型枚举的新类型，修正了这种情况。强类型枚举由关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;enum class&lt;/code&gt;标识。它不会将枚举常量暴露到外层作用域中，也不会隐式转换为整形，并且拥有用户指定的特定类型（传统枚举也增加了这个性质）。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;enum class Options {None, One, All};
+Options o = Options::All;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h6 id=&quot;smart-pointers-&quot;&gt;Smart Pointers 智能指针&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;现在能使用的，带引用计数，并且能自动释放内存的智能指针包括以下几种：&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;unique_ptr: 如果内存资源的所有权不需要共享，就应当使用这个（它没有拷贝构造函数），但是它可以转让给另一个unique_ptr（存在move构造函数）。&lt;/li&gt;
+      &lt;li&gt;shared_ptr: 如果内存资源需要共享，那么使用这个（所以叫这个名字）。&lt;/li&gt;
+      &lt;li&gt;weak_ptr: 持有被shared_ptr所管理对象的引用，但是不会改变引用计数值。它被用来打破依赖循环（想象在一个tree结构中，父节点通过一个共享所有权的引用(chared_ptr)引用子节点，同时子节点又必须持有父节点的引用。如果这第二个引用也共享所有权，就会导致一个循环，最终两个节点内存都无法释放）。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;另一方面，&lt;code class=&quot;highlighter-rouge&quot;&gt;auto_ptr&lt;/code&gt;已经被废弃，不会再使用了。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;以下第一个例子使用了&lt;code class=&quot;highlighter-rouge&quot;&gt;unique_ptr&lt;/code&gt;。如果你想把对象所有权转移给另一个unique_ptr，需要使用std::move（我会在最后几段讨论这个函数）。在所有权转移后，交出所有权的智能指针将为空，get()函数将返回&lt;code class=&quot;highlighter-rouge&quot;&gt;nullptr&lt;/code&gt;。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;void foo(int *p) {
+    std::cout &amp;lt;&amp;lt; *p &amp;lt;&amp;lt; std::endl;
+}
+std::unique_ptr &amp;lt;int&amp;gt; p1(new int(42));
+std::unique_ptr &amp;lt;int&amp;gt; p2 = std::move(p1);
+// transfer ownership
+if (p1)
+    foo(p1.get());
+(*p2)++;
+if (p2)
+    foo(p2.get());
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;第二个例子展示了shared_ptr。用法相似，但语义不同，此时所有权是共享的。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;void foo(int* p){}
+void bar(std::shared_ptr&amp;lt;int&amp;gt; p) {
+    ++(*p);
+}
+std::shared_ptr&amp;lt;int&amp;gt; p1(new int(42));
+std::shared_ptr&amp;lt;int&amp;gt; p2 = p1;
+bar(p1);
+foo(p2.get());
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;第一个声明和以下这行是等价的：&lt;code class=&quot;highlighter-rouge&quot;&gt;auto p3 = std::make_shared&amp;lt;int&amp;gt;(42);&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;make_shared&amp;lt;T&amp;gt;&lt;/code&gt;是一个非成员函数，使用它的好处是可以一次性分配共享对象和智能指针自身的内存。而显示地使用shared_ptr构造函数来构造则至少需要两次内存分配。除了会产生额外的开销，还可能会导致内存泄漏。在下面这个例子中，如果&lt;code class=&quot;highlighter-rouge&quot;&gt;seed()&lt;/code&gt;抛出一个错误就会产生内存泄漏。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;void foo(std::shared_ptr&amp;lt;int&amp;gt; p, int init)
+{
+    *p = init;
+}
+foo(std::shared_ptr&amp;lt;int&amp;gt;(new int(42)), seed());
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;如果使用make_shared就不会有这个问题了。第三个例子展示了weak_ptr。注意，你必须调用lock()来获得被引用对象的shared_ptr，通过它才能访问这个对象。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;auto p = std::make_shared&amp;lt;int&amp;gt;(42);
+std::weak_ptr&amp;lt;int&amp;gt; wp = p;
+{
+	auto sp = wp.lock();
+	std::cout &amp;lt;&amp;lt; *sp &amp;lt;&amp;lt; std::endl;
+} 
+p.reset();
+if(wp.expired())
+    std::cout &amp;lt;&amp;lt; &quot;expired&quot; &amp;lt;&amp;lt; std::endl;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;如果你试图锁定(lock)一个过期（指被弱引用对象已经被释放）的weak_ptr，那你将获得一个空的shared_ptr.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;lambdas&quot;&gt;Lambdas&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;匿名函数（也叫&lt;code class=&quot;highlighter-rouge&quot;&gt;lambda&lt;/code&gt;）已经加入到&lt;code class=&quot;highlighter-rouge&quot;&gt;C++&lt;/code&gt;中，并很快异军突起。这个从函数式编程中借来的强大特性，使很多其他特性以及类库得以实现。你可以在任何使用函数对象或者函子(functor)或std::function的地方使用lambda。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;std::vector &amp;lt; int &amp;gt; v;
+v.push_back(1);
+v.push_back(2);
+v.push_back(3);
+std::for_each(std::begin(v), std::end(v), [](int n) { std::cout &amp;lt;&amp;lt; n &amp;lt;&amp;lt; std::endl; });
+auto is_odd = [](int n) {
+    return n % 2 == 1;
+};
+auto pos = std::find_if(std::begin(v), std::end(v), is_odd);
+if (pos != std::end(v))
+    std::cout &amp;lt;&amp;lt; * pos &amp;lt;&amp;lt; std::endl;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;更复杂的是递归lambda。考虑一个实现Fibonacci函数的lambda。如果你试图用auto来声明，就会得到一个编译错误。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;问题出在&lt;code class=&quot;highlighter-rouge&quot;&gt;auto&lt;/code&gt;意味着对象类型由初始表达式决定，然而初始表达式又包含了对其自身的引用，因此要求先知道它的类型，这就导致了无穷递归。解决问题的关键就是打破这种循环依赖，用&lt;code class=&quot;highlighter-rouge&quot;&gt;std::function&lt;/code&gt;显式的指定函数类型：&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;function&amp;lt;int(int)&amp;gt; fib = [&amp;amp;fib](int n) {return n &amp;lt; 2 ? 1 : fib(n-1) + fib(n-2);};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h6 id=&quot;beginend&quot;&gt;非成员begin()和end()&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;他们是新加入标准库的，除了能提高了代码一致性，还有助于更多地使用泛型编程。它们和所有的STL容器兼容。更重要的是，他们是可重载的。所以它们可以被扩展到支持任何类型。对C类型数组的重载已经包含在标准库中了。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;int arr[] = {1,2,3};
+std::for_each(std::begin(arr), std::end(arr), [](int n) {std::cout &amp;lt;&amp;lt; n &amp;lt;&amp;lt; std::endl;});
+auto is_odd = [](int n) {return n%2==1;};
+auto pos = std::find_if(std::begin(arr), std::end(arr), is_odd);
+if(pos != std::end(arr))
+std::cout &amp;lt;&amp;lt; *pos &amp;lt;&amp;lt; std::endl;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h6 id=&quot;staticassert-type-traits&quot;&gt;static_assert和 type traits&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;static_assert&lt;/code&gt;提供一个编译时的断言检查。如果断言为真，什么也不会发生。如果断言为假，编译器会打印一个特殊的错误信息。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;template &amp;lt;typename T, size_t Size&amp;gt;
+class Vector
+{
+	static_assert(Size &amp;lt; 3, &quot;Size is too small&quot;);
+	T _points[Size];
+};
+int main()
+{
+	Vector&amp;lt;int, 16&amp;gt; a1;
+	Vector&amp;lt;double, 2&amp;gt; a2;
+	return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h6 id=&quot;move-semantics-move&quot;&gt;Move semantics （Move语义）&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;C++11加入了右值引用(rvalue reference)的概念（用&amp;amp;&amp;amp;标识），用来区分对左值和右值的引用。左值就是一个有名字的对象，而右值则是一个无名对象（临时对象）。move语义允许修改右值（以前右值被看作是不可修改的，等同于const T&amp;amp;类型）。&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        <pubDate>Fri, 26 Feb 2016 00:00:00 +0800</pubDate>
+        <link>/2016/02/26/cpp11/</link>
+        <guid isPermaLink="true">/2016/02/26/cpp11/</guid>
+        
+        <category>c++</category>
+        
+        
+      </item>
     
       <item>
         <title>C++中的函数指针和函数对象</title>
