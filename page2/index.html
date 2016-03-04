@@ -12,7 +12,7 @@
 
     <title>Winray | Winray Blog</title>
 
-    <link rel="canonical" href="/">
+    <link rel="canonical" href="/page2/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -154,9 +154,9 @@
             ">
     			
 <div class="post-preview">
-    <a href="/2016/03/04/sicily13/">
+    <a href="/2016/03/04/sicily-3/">
         <h2 class="post-title">
-            Sicily 1034. Forest
+            Sicily 1194. Message Flood
         </h2>
         
         <h3 class="post-subtitle">
@@ -167,16 +167,20 @@
             
   思路：
     
-      网上很多说用深搜，很任性…….发现广搜也挺好用的，实验课打的(⊙o⊙)…orz……..囧。
-      先找根结点，根据根结点广搜深度，广搜宽度，不过要开一个数组，同一层的累加宽度。别忘了要判断是否合法。
+      不区分大小写，先全部转化为小写，用stl提供的函数做会很方便。
     
   
   具体代码如下：
 
 
 #include &lt;iostream&gt;
-#include &lt;cstring&gt;
-#incl...
+#include &lt;set&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main() {
+    int n, m;
+    whi...
         </div>
     </a>
     <p class="post-meta">
@@ -186,9 +190,9 @@
 <hr>
 
 <div class="post-preview">
-    <a href="/2016/03/04/sicily12/">
+    <a href="/2016/03/04/sicily-2/">
         <h2 class="post-title">
-            Sicily 1936. Knight Moves
+            Sicily 1156. Binary tree
         </h2>
         
         <h3 class="post-subtitle">
@@ -199,50 +203,11 @@
             
   思路：
     
-      这道题一开始不理解题意…orz…囧，看大神们理解的。
-      题意是说一个8*8的国际象棋，骑士以马的形式走动（“日”字型），指定两个点，输出最小的步骤。
-      可以利用广度搜索解决。
+      如何愉快地前序输出呢，要在存储数据的时候根据位置来存放数据！一开始被自己蠢哭，一直以为第一个输入的就是根结点（例子的祸害呀啊啊啊！！！！），结果证明不是的，所以呢，我们要找出根结点，那么怎么找根结点呢，我用了一个向量来存储下标值，遍历向量值，把节点的左右值作为下标的那个数据设为非根结点，然后剩下的那个就是根节点了。。
     
   
   具体代码如下：
 
-
-#include &lt;iostream&gt;
-#include &lt;queue&gt;
-#include &lt...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Winray on March 4, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/03/04/sicily11/">
-        <h2 class="post-title">
-            Sicily shortest path in unweighted graph
-        </h2>
-        
-        <h3 class="post-subtitle">
-            For study!
-        </h3>
-        
-        <div class="post-content-preview">
-            
-  题目介绍：
-
-
-输入一个无向图，指定一个顶点s开始bfs遍历，求出s到图中每个点的最短距离。
-
-如果不存在s到t的路径，则记s到t的距离为-1。
- 
-Input
-输入的第一行包含两个整数n和m，n是图的顶点数，m是边数。1&lt;=n&lt;=1000，0&lt;=m&lt;=10000。
-
-以下m行，每行是一个数对v y，表示存在边(v,y)。顶点编号从1开始。 
- 
-Output
 ...
         </div>
     </a>
@@ -253,47 +218,9 @@ Output
 <hr>
 
 <div class="post-preview">
-    <a href="/2016/03/04/sicily10/">
+    <a href="/2016/03/04/sicily-1/">
         <h2 class="post-title">
-            Sicily connect components in undirected graph
-        </h2>
-        
-        <h3 class="post-subtitle">
-            For study!
-        </h3>
-        
-        <div class="post-content-preview">
-            
-  题目介绍：
-
-
-输入一个简单无向图，求出图中连通块的数目。
-
-Input
-输入的第一行包含两个整数n和m，n是图的顶点数，m是边数。1&lt;=n&lt;=1000，0&lt;=m&lt;=10000。
-
-以下m行，每行是一个数对v y，表示存在边(v,y)。顶点编号从1开始。
-Output
-单独一行输出连通块的数目。
-
-Sample Input
-5 3
-1 2
-1 3
-2 4
-Sam...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Winray on March 4, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/03/04/sicily-9/">
-        <h2 class="post-title">
-            Sicily 1931. 卡片游戏
+            Sicily 2005.Lovely Number
         </h2>
         
         <h3 class="post-subtitle">
@@ -304,21 +231,19 @@ Sam...
             
   思路：
     
-      纯属数据结构中队列的应用，可以练练手。
+      若测试数据出现的次数为奇数，则输出它。
+      所以，可以先排序，若前后相等，前后都设为0，最后不为0的则可以输出。
     
   
   具体代码如下：
 
 
 #include &lt;iostream&gt;
-#include &lt;queue&gt;
+#include &lt;algorithm&gt;
 using namespace std;
 
 int main() {
-    int t;
-    cin &gt;&gt; t;
-    while (t--) {
-      ...
+    int t;...
         </div>
     </a>
     <p class="post-meta">
@@ -328,9 +253,9 @@ int main() {
 <hr>
 
 <div class="post-preview">
-    <a href="/2016/03/04/sicily-8/">
+    <a href="/2016/03/02/lec-spider/">
         <h2 class="post-title">
-            Sicily 1021. Couples
+            lec-spider
         </h2>
         
         <h3 class="post-subtitle">
@@ -338,29 +263,194 @@ int main() {
         </h3>
         
         <div class="post-content-preview">
-            
-  思路：
+            爬取课件
+
+  
+    这学期上大数据软件工程，苦于老师只是在网页上放ppt，而不提供下载，为此只好爬取这些图片来“离线”学习了(老师莫怪，这些Cookies过期就用不了呢)
+  
+  程序提供了最简单的爬虫程序
     
-      想清楚了这道题其实很简单。利用夫妻出现的位置作为下标，并设为同一值，第一对夫妻值为1，第二对为2，以此类推，存储完毕即可进入下一步。
-      利用栈这个数据结构：遍历这个数组，当栈不为空且栈顶元素等于数组出现的元素时，pop掉栈顶元素，其余情况则入栈。循环完毕，若栈为空则为Yes，否则为No。
+      直接利用登陆后的Cookies“模拟”登陆就可以了
+      登录后，利用正则表达式匹配老师图片课件
     
   
-  具体代码如下：
-
-
-#include ...
+  爬取课件url后下载到指定本地文...
         </div>
     </a>
     <p class="post-meta">
-        Posted by Winray on March 4, 2016
+        Posted by Winray on March 2, 2016
     </p>
 </div>
 <hr>
 
 <div class="post-preview">
-    <a href="/2016/03/04/sicily-7/">
+    <a href="/2016/02/26/cpp/">
         <h2 class="post-title">
-            Sicily 1129. ISBN
+            C++11新特性
+        </h2>
+        
+        <h3 class="post-subtitle">
+            For study!
+        </h3>
+        
+        <div class="post-content-preview">
+            c++11简介
+
+  
+    C++11不仅包含核心语言的新机能，而且扩展了C++的标准程序库（STL），并入了大部分的C++ Technical Report 1（TR1）程序库(数学的特殊函数除外)。
+  
+  
+    C++11包括大量的新特性：包括lambda表达式，类型推导关键字auto、decltype，和模板的大量改进。
+  
+
+
+auto
+
+  在新标准中，它的功能变为类...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Winray on February 26, 2016
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2016/02/25/pointer/">
+        <h2 class="post-title">
+            C++中的函数指针和函数对象
+        </h2>
+        
+        <h3 class="post-subtitle">
+            For study!
+        </h3>
+        
+        <div class="post-content-preview">
+            函数指针
+
+  
+    函数指针：是指向函数的指针变量，在C编译时，每一个函数都有一个入口地址，那么这个指向这个函数的函数指针便指向这个地址。
+  
+  
+    函数指针的用途是很大的，主要有两个作用：用作调用函数和做函数的参数。
+  
+
+
+函数指针的声明方法：
+数据类型标志符 （指针变量名） （形参列表）；
+一般函数的声明为: 
+int func ( int x );
+而一个函数指针的...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Winray on February 25, 2016
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2016/02/22/sicily2/">
+        <h2 class="post-title">
+            Sicily 1153.马的周游问题 解题报告
+        </h2>
+        
+        <h3 class="post-subtitle">
+            For study!
+        </h3>
+        
+        <div class="post-content-preview">
+            原题目：
+
+Constraints
+Time Limit: 1 secs, Memory Limit: 32 MB , Special Judge
+
+Description
+在一个8 * 8的棋盘中的某个位置有一只马，如果它走64步正好经过除起点外的其他
+位置各一次，这样一种走法则称马的周游路线，试设计一个算法，从给定的起点出发，
+找出它的一条周游路线。
+为了便于表示一个棋盘，我们按照从上到...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Winray on February 22, 2016
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2016/02/22/sicily/">
+        <h2 class="post-title">
+            Sicily 1151.魔板 解题报告
+        </h2>
+        
+        <h3 class="post-subtitle">
+            For study!
+        </h3>
+        
+        <div class="post-content-preview">
+            原题目：
+
+Constraints
+Time Limit: 1 secs, Memory Limit: 32 MB , Special Judge
+
+Description
+魔板由8个大小相同方块组成，分别用涂上不同颜色，用1到8的数字表示。
+其初始状态是
+1 2 3 4
+8 7 6 5
+对魔板可进行三种基本操作：
+A操作（上下行互换）：
+8 7 6 5
+1 2 3 4
+B操作（每次以行循环...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Winray on February 22, 2016
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2016/02/22/linux/">
+        <h2 class="post-title">
+            Linux常用命令
+        </h2>
+        
+        <h3 class="post-subtitle">
+            For study!
+        </h3>
+        
+        <div class="post-content-preview">
+            man可以用于提供命令解释
+
+  如man ls可以查看ls相关用法
+  按q键或者ctrl+c退出，在linux可以使用ctrl+c终止当前程序的运行
+
+
+ls查看目录或者文件，可以是当前目录，也可以指定一个目录
+
+  ls -l列出详细信息
+    
+      d表示目录
+      -表示文件
+      l表示文件链接
+      r表示可读
+      w表示可写
+      x...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Winray on February 22, 2016
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2016/02/21/inherit-polymorphism/">
+        <h2 class="post-title">
+            C++继承与多态
         </h2>
         
         <h3 class="post-subtitle">
@@ -369,100 +459,18 @@ int main() {
         
         <div class="post-content-preview">
             
-  思路：
+  继承（Inheritance）
     
-      这道题比较简单，只要看懂题目就应该可以了。那就解释下题目好了，题目意思是按照权值计算这10个数字和，依据这个和计算还差多少可以对11整除，若还差10，那么在这个结尾加上“-X”，若不是10则输出“-”加上还差多少可以整除的那个数。
+      允许在保持原有类特性的基础上进行扩展，增加功能。这样产生的新类称为“派生类”。继承呈现了面向对象程序设计的层次结构，体现了人类对现实世界由简单到复杂的认识过程。
     
   
-  具体代码如下：
-
-
-#include &lt;iostream&gt;
-#include &lt;stri...
+  多态性（Polymorphism）
+    
+      包括静态的多态性和动态的多态性。前者亦称编译时的多态性，包括函数重载和运算符重载。多态体现了类...
         </div>
     </a>
     <p class="post-meta">
-        Posted by Winray on March 4, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/03/04/sicily-6/">
-        <h2 class="post-title">
-            Sicily 1133. SPAM
-        </h2>
-        
-        <h3 class="post-subtitle">
-            For study!
-        </h3>
-        
-        <div class="post-content-preview">
-            
-  思路：
-    
-      题目意思是说在‘@’的前后出现题目给定的合法字符或者不连续出现‘.’字符的话，这个就是合理的输出。那么以@为中心，向前，向后扫描，当扫描到不符合字符时，记录此时位置，以前后为区间，输出字符。
-    
-  
-  具体代码如下：
-
-
-#include &lt;iostream&gt;
-#include &lt;string&gt;
-using namespa...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Winray on March 4, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/03/04/sicily-5/">
-        <h2 class="post-title">
-            Sicily 1282. Computer Game
-        </h2>
-        
-        <h3 class="post-subtitle">
-            For study!
-        </h3>
-        
-        <div class="post-content-preview">
-            
-  思路：
-    
-      KMP算法，网上有很多资料，参考了一些网上的解题，收获很大，很感谢那些大神们！！！
-      通过这道题简单说说我对KMP算法的理解吧（大神们勿喷，虽然没人看我的orz~~~~囧）。
-      首先输入的是要匹配的字符串，如果这个字符串的首字母在整个字符串不重复出现的话，直接一直匹配下去即可。诶，那重复出现了怎么办，那就从最后一个重复出现的重新开始匹配...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Winray on March 4, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/03/04/sicily-4/">
-        <h2 class="post-title">
-            Sicily 1323. Switch text
-        </h2>
-        
-        <h3 class="post-subtitle">
-            For study!
-        </h3>
-        
-        <div class="post-content-preview">
-            
-  思路：
-    
-      题目意思不好理解呀。
-      题目意思是这样的：输入两个测试数据，首先，两个测试数据本身得各自前后倒转，然后两个测试数据倒转后的结果再各自对半互换，然后测试数据二先输出，测试数据一再输出，不断循环下去。还有一点很关键，就是对空行的判断，这个空行可以是空格组成，或者是直接回车，空行是忽略不输出的。还是直接看代码吧，这样好理解一点。用stl会使程序简化明了...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Winray on March 4, 2016
+        Posted by Winray on February 21, 2016
     </p>
 </div>
 <hr>
@@ -472,9 +480,13 @@ using namespa...
 
 <ul class="pager">
     
+    <li class="previous">
+        <a href="/">&larr; Newer Posts</a>
+    </li>
+    
     
     <li class="next">
-        <a href="/page2">Older Posts &rarr;</a>
+        <a href="/page3">Older Posts &rarr;</a>
     </li>
     
 </ul>

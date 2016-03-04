@@ -10,9 +10,9 @@
     <meta name="keyword"  content="">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>c++深拷贝与浅拷贝 - Winray | Winray Blog</title>
+    <title>Sicily 1156. Binary tree - Winray | Winray Blog</title>
 
-    <link rel="canonical" href="/2016/02/21/copy/">
+    <link rel="canonical" href="/2016/03/04/sicily-2/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -140,15 +140,17 @@
                 <div class="post-heading">
                     <div class="tags">
                         
+                        <a class="tag" href="/tags/#sicily" title="sicily">sicily</a>
+                        
                         <a class="tag" href="/tags/#c++" title="c++">c++</a>
                         
                     </div>
-                    <h1>c++深拷贝与浅拷贝</h1>
+                    <h1>Sicily 1156. Binary tree</h1>
                     
                     
                     <h2 class="subheading">For study!</h2>
                     
-                    <span class="meta">Posted by Winray on February 21, 2016</span>
+                    <span class="meta">Posted by Winray on March 4, 2016</span>
                 </div>
             </div>
         </div>
@@ -167,183 +169,64 @@
                 post-container">
 
 				<ul>
-  <li>术语
+  <li>思路：
     <ul>
-      <li>浅拷贝 shallow copy</li>
-      <li>深复制 deep copy</li>
+      <li>如何愉快地前序输出呢，要在存储数据的时候根据位置来存放数据！一开始被自己蠢哭，一直以为第一个输入的就是根结点（例子的祸害呀啊啊啊！！！！），结果证明不是的，所以呢，我们要找出根结点，那么怎么找根结点呢，我用了一个向量来存储下标值，遍历向量值，把节点的左右值作为下标的那个数据设为非根结点，然后剩下的那个就是根节点了。。</li>
     </ul>
   </li>
+  <li>具体代码如下：</li>
 </ul>
 
-<h6 id="section">默认拷贝构造函数</h6>
-<ul>
-  <li>很多时候在我们不定义拷贝构造函数的情况下，传递对象给函数参数或者函数返回对象都能很好的进行，这是因为编译器会给我们自动产生一个拷贝构造函数，这就是“默认拷贝构造函数”，这个构造函数很简单，仅仅使用“老对象”的数据成员的值对“新对象”的数据成员一一进行赋值。</li>
-  <li><strong>然而，拷贝构造函数没有处理静态数据成员。</strong></li>
-</ul>
+<div class="highlighter-rouge"><pre class="highlight"><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
 
-<h6 id="section-1">浅拷贝</h6>
-<ul>
-  <li>所谓浅拷贝，指的是在对象复制时，只对对象中的数据成员进行简单的赋值，默认拷贝构造函数执行的也是浅拷贝。大多情况下“浅拷贝”已经能很好地工作了，但是一旦对象存在了动态成员，那么浅拷贝就会出问题了，让我们考虑如下一段代码：</li>
-</ul>
+struct Store{
+    char node;
+    int left;
+    int right;
+    bool is_root;
+}store[1001];
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1">#include&lt;iostream&gt;</span>
-<span class="c1">#include&lt;assert.h&gt;</span>
-<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
-
-<span class="k">class</span> <span class="nc">Rect</span>
-<span class="p">{</span>
-<span class="ss">public:
-    </span><span class="no">Rect</span><span class="p">()</span>
-    <span class="p">{</span>
-     <span class="nb">p</span><span class="o">=</span><span class="kp">new</span> <span class="n">int</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
-    <span class="p">}</span>
-   
-    <span class="o">~</span><span class="no">Rect</span><span class="p">()</span>
-    <span class="p">{</span>
-     <span class="n">assert</span><span class="p">(</span><span class="nb">p</span><span class="o">!=</span><span class="no">NULL</span><span class="p">);</span>
-        <span class="n">delete</span> <span class="nb">p</span><span class="p">;</span>
-    <span class="p">}</span>
-
-<span class="ss">private:
-    </span><span class="n">int</span> <span class="n">width</span><span class="p">;</span>
-    <span class="n">int</span> <span class="n">height</span><span class="p">;</span>
-    <span class="n">int</span> <span class="o">*</span><span class="nb">p</span><span class="p">;</span>
-<span class="p">};</span>
-
-
-<span class="n">int</span> <span class="n">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="no">Rect</span> <span class="n">rect1</span><span class="p">;</span>
-    <span class="no">Rect</span> <span class="n">rect2</span><span class="p">(</span><span class="n">rect1</span><span class="p">);</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span></code></pre></figure>
-
-<ul>
-  <li>在这段代码运行结束之前，会出现一个运行错误。原因就在于在进行对象复制时，对于动态分配的内容没有进行正确的操作。</li>
-</ul>
-
-<h6 id="section-2">深拷贝</h6>
-<ul>
-  <li>在“深拷贝”的情况下，对于对象中动态成员，就不能仅仅简单地赋值了，而应该重新动态分配空间，如上面的例子就应该按照如下的方式进行处理：</li>
-</ul>
-
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1">#include&lt;iostream&gt;</span>
-<span class="c1">#include&lt;assert.h&gt;</span>
-<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
-
-<span class="k">class</span> <span class="nc">Rect</span>
-<span class="p">{</span>
-<span class="ss">public:
-    </span><span class="no">Rect</span><span class="p">()</span>
-    <span class="p">{</span>
-     <span class="nb">p</span><span class="o">=</span><span class="kp">new</span> <span class="n">int</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
-    <span class="p">}</span>
+void print(int x) {
+    if (x == 0) return;
+    cout &lt;&lt; store[x].node;
+    print(store[x].left);
+    print(store[x].right);
+}
+int main() {
+    int t;
+    while (cin &gt;&gt; t) {
+        int index;
+        vector&lt;int&gt; store_index;
+        for (int i = 0; i &lt; t; i++) {
+            cin &gt;&gt; index;
+            cin &gt;&gt; store[index].node &gt;&gt; store[index].left
+                &gt;&gt; store[index].right;
+            store[index].is_root = true;
+            store_index.push_back(index);
+        }
+        for (int i = 0; i &lt; t; i++) {
+            int left = store[store_index[i]].left;
+            int right = store[store_index[i]].right;
+            store[left].is_root = false;
+            store[right].is_root = false;
+        }
+        int root_node;
+        for (int i = 0; i &lt; t; i++) {
+            if (store[store_index[i]].is_root == true) {
+                root_node = store_index[i];
+                break;
+            }
+        }
+        print(root_node);
+        cout &lt;&lt; endl;
+    }
     
-    <span class="no">Rect</span><span class="p">(</span><span class="n">const</span> <span class="no">Rect</span><span class="o">&amp;</span> <span class="n">r</span><span class="p">)</span>
-    <span class="p">{</span>
-     <span class="n">width</span><span class="o">=</span><span class="n">r</span><span class="p">.</span><span class="nf">width</span><span class="p">;</span>
-        <span class="n">height</span><span class="o">=</span><span class="n">r</span><span class="p">.</span><span class="nf">height</span><span class="p">;</span>
-     <span class="nb">p</span><span class="o">=</span><span class="kp">new</span> <span class="n">int</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
-        <span class="o">*</span><span class="nb">p</span><span class="o">=*</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="nf">p</span><span class="p">);</span>
-    <span class="p">}</span>
-     
-    <span class="o">~</span><span class="no">Rect</span><span class="p">()</span>
-    <span class="p">{</span>
-     <span class="n">assert</span><span class="p">(</span><span class="nb">p</span><span class="o">!=</span><span class="no">NULL</span><span class="p">);</span>
-        <span class="n">delete</span> <span class="nb">p</span><span class="p">;</span>
-    <span class="p">}</span>
-
-<span class="ss">private:
-    </span><span class="n">int</span> <span class="n">width</span><span class="p">;</span>
-    <span class="n">int</span> <span class="n">height</span><span class="p">;</span>
-    <span class="n">int</span> <span class="o">*</span><span class="nb">p</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="n">int</span> <span class="n">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="no">Rect</span> <span class="n">rect1</span><span class="p">;</span>
-    <span class="no">Rect</span> <span class="n">rect2</span><span class="p">(</span><span class="n">rect1</span><span class="p">);</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span></code></pre></figure>
-
-<h3 id="tips">Tips</h3>
-
-<h6 id="noncopyable">防止默认拷贝发生(禁止复制 noncopyable)</h6>
-<ul>
-  <li>通过对对象复制的分析，我们发现对象的复制大多在进行“值传递”时发生，这里有一个小技巧可以防止按值传递——声明一个私有拷贝构造函数。甚至不必去定义这个拷贝构造函数，这样因为拷贝构造函数是私有的，如果用户试图按值传递或函数返回该类对象，将得到一个编译错误，从而可以避免按值传递或返回对象。</li>
-</ul>
-
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">CExample</span> <span class="p">{</span> <span class="sr">//</span><span class="err">防止按值传递</span>
-<span class="ss">private: 
-    </span><span class="n">int</span> <span class="n">a</span><span class="p">;</span> 
-<span class="ss">public: 
-    </span><span class="no">CExample</span><span class="p">(</span><span class="n">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span> <span class="sr">//</span><span class="err">构造函数</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">"creat: "</span> <span class="o">&lt;&lt;</span> <span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> 
-    <span class="p">}</span>
-
-<span class="ss">private: 
-    </span><span class="no">CExample</span><span class="p">(</span><span class="n">const</span> <span class="no">CExample</span><span class="o">&amp;</span> <span class="no">C</span><span class="p">);</span> <span class="sr">//</span><span class="err">拷贝构造函数，只是声明</span>
-<span class="ss">public: 
-    </span><span class="o">~</span><span class="no">CExample</span><span class="p">()</span> <span class="p">{</span> 
-        <span class="n">cout</span><span class="o">&lt;&lt;</span> <span class="s2">"delete: "</span> <span class="o">&lt;&lt;</span> <span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> 
-    <span class="p">}</span> 
-  
-    <span class="n">void</span> <span class="no">Show</span> <span class="p">()</span> 
-    <span class="p">{</span> 
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> 
-    <span class="p">}</span> 
-<span class="p">};</span> 
-  
-<span class="n">void</span> <span class="n">g_Fun</span><span class="p">(</span><span class="no">CExample</span> <span class="no">C</span><span class="p">)</span> 
-<span class="p">{</span> 
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">"test"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> 
-<span class="p">}</span> 
-  
-<span class="n">int</span> <span class="n">main</span><span class="p">()</span> 
-<span class="p">{</span> 
-    <span class="no">CExample</span> <span class="nb">test</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> 
-    <span class="sr">//</span><span class="n">g_Fun</span><span class="p">(</span><span class="nb">test</span><span class="p">);</span>   <span class="sr">//</span><span class="err">按值传递将出错</span>
-      
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span> 
-<span class="p">}</span></code></pre></figure>
-
-<ul>
-  <li>为什么拷贝构造函数必须是引用传递，不能是值传递？
-    <ul>
-      <li>简单的回答是为了防止递归引用。</li>
-      <li>具体一些可以这么讲：当一个对象需要以值方式传递时，编译器会生成代码调用它的拷贝构造函数以生成一个复本。如果类A的拷贝构造函数是以值方式传递一个类A对象作为参数的话，当 需要调用类A的拷贝构造函数时，需要以值方式传进一个A的对象作为实参； 而以值方式传递需要调用类A的拷贝构造函数；结果就是调用类A的拷贝构造函数导 致又一次调用类A的拷贝构造函数，这就是一个无限递归。</li>
-    </ul>
-  </li>
-  <li>拷贝构造函数的作用。
-    <ul>
-      <li>作用就是用来复制对象的，在使用这个对象的实例来初始化这个对象的一个新的实例。</li>
-    </ul>
-  </li>
-  <li>析构函数为什么一般情况下要声明为虚函数？
-    <ul>
-      <li>虚函数是实现多态的基础，当我们通过基类的指针是析构子类对象时候，如果不定义成虚函数，那只调用基类的析构函数，子类的析构函数将不会被调用。如果定义为虚函数，则子类父类的析构函数都会被调用。</li>
-    </ul>
-  </li>
-  <li>什么情况下必须定义拷贝构造函数？
-    <ul>
-      <li>当类的对象用于函数值传递时（值参数，返回类对象），拷贝构造函数会被调用。如果对象复制并非简单的值拷贝，那就必须定义拷贝构造函数。例如大的堆栈数据拷贝。如果定义了拷贝构造函数，那也必须重载赋值操作符。</li>
-    </ul>
-  </li>
-  <li>构造函数能否重载，析构函数能否重载，为什么？
-    <ul>
-      <li>函数重载就是同一函数名的不同实现，并且能在编译时能与一具体形式匹配，这样参数列表必须不一样。由于重载函数与普通函数的差别是没有返回值，而返回值不能确定函数重载，所以构造函数可以重载； 析构函数的特点是参数列表为空，并且无返回值，从而不能重载。</li>
-    </ul>
-  </li>
-</ul>
-
-<h3 id="section-3">总结</h3>
-<ul>
-  <li><strong>当出现类的等号赋值时，会调用拷贝函数，在未定义显示拷贝构造函数的情况下，系统会调用默认的拷贝函数——即浅拷贝，它能够完成成员的一一复制。当数据成员中没有指针时，浅拷贝是可行的。但当数据成员中有指针时，如果采用简单的浅拷贝，则两类中的两个指针将指向同一个地址，当对象快结束时，会调用两次析构函数，而导致指针悬挂现象。所以，这时，必须采用深拷贝。</strong></li>
-  <li>深拷贝与浅拷贝的区别就在于深拷贝会在堆内存中另外申请空间来储存数据，从而也就解决了指针悬挂的问题。简而言之，当数据成员中有指针时，必须要用深拷贝。</li>
-  <li>类中可以存在超过一个拷贝构造函数。</li>
-</ul>
-
+    return 0;
+}
+</code></pre>
+</div>
 
 
                 <hr>
@@ -353,22 +236,14 @@
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="/2016/02/21/copy"
-                    data-title="c++深拷贝与浅拷贝"
-                    data-url="/2016/02/21/copy/"
+                    data-thread-key="/2016/03/04/sicily-2"
+                    data-title="Sicily 1156. Binary tree"
+                    data-url="/2016/03/04/sicily-2/"
                     data-images="/img/home-bg.jpg"
                     data-content="
-  术语
+  思路：
     
-      浅拷贝 shallow copy
-      深复制 deep copy
-    
-  
-
-
-默认拷贝构造函数
-
-  很... | Winray | Winray Blog " >
+      如何愉快地前序输出呢，要在存储数据的时候根据位置来存放数据！一开始被自己蠢哭，一直以为第一个输入的就是根结点（例子的祸... | Winray | Winray Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -388,12 +263,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2016/02/19/Hello-World/" data-toggle="tooltip" data-placement="top" title="Hello World">&larr; Previous Post</a>
+                        <a href="/2016/03/04/sicily-1/" data-toggle="tooltip" data-placement="top" title="Sicily 2005.Lovely Number">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2016/02/21/inherit-polymorphism/" data-toggle="tooltip" data-placement="top" title="C++继承与多态">Next Post &rarr;</a>
+                        <a href="/2016/03/04/sicily-3/" data-toggle="tooltip" data-placement="top" title="Sicily 1194. Message Flood">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -403,9 +278,9 @@
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="/2016/02/21/copy"
-                        data-title="c++深拷贝与浅拷贝"
-                        data-url="/2016/02/21/copy/" >
+                        data-thread-key="/2016/03/04/sicily-2"
+                        data-title="Sicily 1156. Binary tree"
+                        data-url="/2016/03/04/sicily-2/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
