@@ -5,9 +5,212 @@
     <description>For study!</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 04 Mar 2016 11:35:46 +0800</pubDate>
-    <lastBuildDate>Fri, 04 Mar 2016 11:35:46 +0800</lastBuildDate>
+    <pubDate>Sun, 06 Mar 2016 01:36:45 +0800</pubDate>
+    <lastBuildDate>Sun, 06 Mar 2016 01:36:45 +0800</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
+    
+      <item>
+        <title>经典排序算法（二）</title>
+        <description>
+</description>
+        <pubDate>Sun, 06 Mar 2016 00:00:00 +0800</pubDate>
+        <link>/2016/03/06/algorithm/</link>
+        <guid isPermaLink="true">/2016/03/06/algorithm/</guid>
+        
+        <category>算法</category>
+        
+        <category>c++</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>经典排序算法（一）</title>
+        <description>&lt;h5 id=&quot;section&quot;&gt;概述&lt;/h5&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;排序&lt;/strong&gt;是计算机程序设计中的一种重要操作，简单的说，可以使任意序列重新排列成一个按关键字有序的序列。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;好处：
+    &lt;ul&gt;
+      &lt;li&gt;有序顺序可以采用查找效率较高的折半查找法&lt;/li&gt;
+      &lt;li&gt;有如建造数表（无论是二叉树还是B-树）的过程本身就是一个排序的过程&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;section-1&quot;&gt;稳定与否&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;若两个相等数，在排序前与排序后的顺序相同，则是稳定的排序，否则是不稳定的。&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;eg：&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;假设:	 a = b
+稳定:	 a, b --&amp;gt;  a, b
+不稳定:  a, b --&amp;gt;  b, a
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;section-2&quot;&gt;内（/外）部排序&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;内部排序：指的是带排序的记录存放在计算机存储器中进行的排序过程
+    &lt;ul&gt;
+      &lt;li&gt;插入排序&lt;/li&gt;
+      &lt;li&gt;交换排序&lt;/li&gt;
+      &lt;li&gt;选择排序&lt;/li&gt;
+      &lt;li&gt;归并排序&lt;/li&gt;
+      &lt;li&gt;计数排序&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;外部排序：指的是带排序的记录数量很大，以致内存一次不能容纳全部记录，在排序过程中尚需对外存进行访问的排序过程。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&quot;section-3&quot;&gt;两种基本操作&lt;/h5&gt;
+&lt;ul&gt;
+  &lt;li&gt;比较两个关键字的大小&lt;/li&gt;
+  &lt;li&gt;将记录从一个位置移动至另外一个记录&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;section-4&quot;&gt;排序算法&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;下面正式介绍各种排序算法&lt;/li&gt;
+  &lt;li&gt;都是从小到大排序&lt;/li&gt;
+  &lt;li&gt;以整形为例&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;section-5&quot;&gt;插入排序&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;直接插入排序，是一种最简单的排序方法&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;基本操作是将一个记录插入到已排好的有序表中从而得到一个新的、记录数增1的有序表。&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;insertSort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[],&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+              &lt;span class=&quot;c1&quot;&gt;//把比插入元素大的元素后移 
+&lt;/span&gt;              &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+          &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;c1&quot;&gt;//找打合适位置插入 
+&lt;/span&gt;          &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;section-6&quot;&gt;希尔排序&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;类似与插入排序&lt;/li&gt;
+  &lt;li&gt;改进：
+    &lt;ul&gt;
+      &lt;li&gt;通过比较相距一定间隔的元素来工作；&lt;/li&gt;
+      &lt;li&gt;随着每一趟比较所用的距离随着算法的进行而减小；&lt;/li&gt;
+      &lt;li&gt;直到只比较相邻元素的最后一趟排序位置。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;为此，希尔排序有时也叫缩减增量排序。&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;void shellSort(int test[], int len) {
+  for (int gap = len/2; gap &amp;gt; 0; gap /= 2) {
+      //选取步长 
+      for (int i = gap; i &amp;lt; len; i++) {
+          //以步长进行的选择排序 
+          int tmp = test[i], j;
+          for (j = i; j &amp;gt;= gap &amp;amp;&amp;amp; tmp &amp;lt; test[j-gap]; j -= gap) {
+              test[j] = test[j-gap];
+          }
+          //找到合适位置插入 
+          test[j] = tmp;
+      }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;section-7&quot;&gt;冒泡排序&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;每一轮都把这轮的最大放到最后的位置&lt;/li&gt;
+  &lt;li&gt;如：
+    &lt;ul&gt;
+      &lt;li&gt;第一轮把最大的数字放到最后一位&lt;/li&gt;
+      &lt;li&gt;第二轮把最大的数字放到倒数第二位&lt;/li&gt;
+      &lt;li&gt;第三轮把最大的数字放到倒数第三位&lt;/li&gt;
+      &lt;li&gt;以此类推&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;void bubbleSort(int test[], int len) {
+  for (int i = 1; i &amp;lt; len; i++) {
+      //每一轮都把这轮最大的数放到（‘len-i’位置）
+      for (int j = 0; j &amp;lt; len-i; j++) {
+          if (test[j] &amp;gt; test[j+1]) {
+              int tmp = test[j+1];
+              test[j+1] = test[j];
+              test[j] = tmp;			
+          }
+      }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;section-8&quot;&gt;选择排序&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;类似冒泡排序&lt;/li&gt;
+  &lt;li&gt;但是交换次数减少，因为冒泡排序是通过每一次交换把数字替换，而选择排序是选出最小一位再交换，效果更好&lt;/li&gt;
+  &lt;li&gt;找到每一轮的最小元素，然后替换，直到最后排序完成&lt;/li&gt;
+  &lt;li&gt;如：
+    &lt;ul&gt;
+      &lt;li&gt;第一轮把最小的数字放到第一位&lt;/li&gt;
+      &lt;li&gt;第二轮把最小的数字放到第二位&lt;/li&gt;
+      &lt;li&gt;第三轮把最小的数字放到第三位&lt;/li&gt;
+      &lt;li&gt;以此类推。&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;void selectSort(int test[], int len) {
+  for (int i = 0; i &amp;lt; len; ++i) {
+      //记录当前为最小元素 
+      int index = i;
+      //找到最小元素 
+      for (int j = i+1; j &amp;lt; len; ++j) {
+          if (test[j] &amp;lt; test[index]) {
+              index = j;
+          }
+      }
+      //如果找到的最小元素比记录的最小元素要小，那么替换当前最小元素 
+      if (index != i) {
+          int tmp = test[index];
+          test[index] = test[i];
+          test[i] = tmp;
+      }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        <pubDate>Sat, 05 Mar 2016 00:00:00 +0800</pubDate>
+        <link>/2016/03/05/algorithm/</link>
+        <guid isPermaLink="true">/2016/03/05/algorithm/</guid>
+        
+        <category>算法</category>
+        
+        <category>c++</category>
+        
+        
+      </item>
     
       <item>
         <title>Sicily 1034. Forest</title>
@@ -623,125 +826,6 @@ int main() {
         <pubDate>Fri, 04 Mar 2016 00:00:00 +0800</pubDate>
         <link>/2016/03/04/sicily-6/</link>
         <guid isPermaLink="true">/2016/03/04/sicily-6/</guid>
-        
-        <category>sicily</category>
-        
-        <category>c++</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Sicily 1282. Computer Game</title>
-        <description>&lt;ul&gt;
-  &lt;li&gt;思路：
-    &lt;ul&gt;
-      &lt;li&gt;KMP算法，网上有很多资料，参考了一些网上的解题，收获很大，很感谢那些大神们！！！&lt;/li&gt;
-      &lt;li&gt;通过这道题简单说说我对KMP算法的理解吧（大神们勿喷，虽然没人看我的orz~~~~囧）。&lt;/li&gt;
-      &lt;li&gt;首先输入的是要匹配的字符串，如果这个字符串的首字母在整个字符串不重复出现的话，直接一直匹配下去即可。诶，那重复出现了怎么办，那就从最后一个重复出现的重新开始匹配，那么这就找到优化算法的好方法了，KMP算法的精髓大致是这样的。&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;具体代码如下：&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
-#include &amp;lt;cstdio&amp;gt;
-using namespace std;
-
-int main() {
-    int len1, len2;
-    while (cin &amp;gt;&amp;gt; len1) {
-        int code[60001] = {0}; 
-        int next[60001] = {0};
-        for (int i = 1; i &amp;lt;= len1; i++) {
-            scanf(&quot;%d&quot;, &amp;amp;code[i]);
-        }
-        int index = 0;
-        for (int i = 2; i &amp;lt;= len1; i++) {
-            index = code[index+1] == code[i] ? index+1 : 0;
-            next[i] = index;
-        }
-        cin &amp;gt;&amp;gt; len2;
-        index = 0;
-        int test, result;
-        for (int i = 1; i &amp;lt;= len2; i++) {
-            scanf(&quot;%d&quot;, &amp;amp;test);
-            if (index != len1) {
-                index = code[index+1] == test ? index+1 : next[index];
-                if (index == len1) {
-                    result = i-len1;
-                }
-            }
-        }
-        index == len1 ? cout &amp;lt;&amp;lt; result &amp;lt;&amp;lt; endl : cout &amp;lt;&amp;lt; &quot;no solution\n&quot;;
-    }
-    
-    return 0;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-</description>
-        <pubDate>Fri, 04 Mar 2016 00:00:00 +0800</pubDate>
-        <link>/2016/03/04/sicily-5/</link>
-        <guid isPermaLink="true">/2016/03/04/sicily-5/</guid>
-        
-        <category>sicily</category>
-        
-        <category>c++</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Sicily 1323. Switch text</title>
-        <description>&lt;ul&gt;
-  &lt;li&gt;思路：
-    &lt;ul&gt;
-      &lt;li&gt;题目意思不好理解呀。&lt;/li&gt;
-      &lt;li&gt;题目意思是这样的：输入两个测试数据，首先，两个测试数据本身得各自前后倒转，然后两个测试数据倒转后的结果再各自对半互换，然后测试数据二先输出，测试数据一再输出，不断循环下去。还有一点很关键，就是对空行的判断，这个空行可以是空格组成，或者是直接回车，空行是忽略不输出的。还是直接看代码吧，这样好理解一点。用stl会使程序简化明了很多&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;具体代码如下：&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
-#include &amp;lt;set&amp;gt;
-#include &amp;lt;string&amp;gt;
-using namespace std;
-
-int main() {
-    int n, m;
-    while (cin &amp;gt;&amp;gt; n &amp;amp;&amp;amp; n) {
-        cin &amp;gt;&amp;gt; m;
-        set&amp;lt;string&amp;gt; v;
-        for (int i = 0; i &amp;lt; n; i++) {
-            string temp;
-            cin &amp;gt;&amp;gt; temp;
-            for (int j = 0; j &amp;lt; temp.size(); j++) {  //全部转化为小写 
-                temp[j] = tolower(temp[j]);
-            }
-            v.insert(temp);
-        }
-        for (int i = 0; i &amp;lt; m; i++) {
-            string temp;
-            cin &amp;gt;&amp;gt; temp;
-            for (int j = 0; j &amp;lt; temp.size(); j++) {
-                temp[j] = tolower(temp[j]);
-            }
-            if (v.count(temp))
-                v.erase(temp); 
-        }
-        cout &amp;lt;&amp;lt; v.size() &amp;lt;&amp;lt; endl;
-    }
-    
-    return 0;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-</description>
-        <pubDate>Fri, 04 Mar 2016 00:00:00 +0800</pubDate>
-        <link>/2016/03/04/sicily-4/</link>
-        <guid isPermaLink="true">/2016/03/04/sicily-4/</guid>
         
         <category>sicily</category>
         

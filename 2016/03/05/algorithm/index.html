@@ -10,9 +10,9 @@
     <meta name="keyword"  content="">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>Sicily 2005.Lovely Number - Winray | Winray Blog</title>
+    <title>经典排序算法（一） - Winray | Winray Blog</title>
 
-    <link rel="canonical" href="/2016/03/04/sicily-1/">
+    <link rel="canonical" href="/2016/03/05/algorithm/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -140,17 +140,17 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#sicily" title="sicily">sicily</a>
+                        <a class="tag" href="/tags/#算法" title="算法">算法</a>
                         
                         <a class="tag" href="/tags/#c++" title="c++">c++</a>
                         
                     </div>
-                    <h1>Sicily 2005.Lovely Number</h1>
+                    <h1>经典排序算法（一）</h1>
                     
                     
                     <h2 class="subheading">For study!</h2>
                     
-                    <span class="meta">Posted by Winray on March 4, 2016</span>
+                    <span class="meta">Posted by Winray on March 5, 2016</span>
                 </div>
             </div>
         </div>
@@ -168,46 +168,180 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				<ul>
-  <li>思路：
+				<h5 id="section">概述</h5>
+<blockquote>
+  <p><strong>排序</strong>是计算机程序设计中的一种重要操作，简单的说，可以使任意序列重新排列成一个按关键字有序的序列。</p>
+</blockquote>
+
+<ul>
+  <li>好处：
     <ul>
-      <li>若测试数据出现的次数为奇数，则输出它。</li>
-      <li>所以，可以先排序，若前后相等，前后都设为0，最后不为0的则可以输出。</li>
+      <li>有序顺序可以采用查找效率较高的折半查找法</li>
+      <li>有如建造数表（无论是二叉树还是B-树）的过程本身就是一个排序的过程</li>
     </ul>
   </li>
-  <li>具体代码如下：</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>#include &lt;iostream&gt;
-#include &lt;algorithm&gt;
-using namespace std;
+<h6 id="section-1">稳定与否</h6>
+<ul>
+  <li>若两个相等数，在排序前与排序后的顺序相同，则是稳定的排序，否则是不稳定的。</li>
+  <li>
+    <p>eg：</p>
 
-int main() {
-    int t;
-    while (cin &gt;&gt; t) {
-        int *array = new int[t]; 
-        for (int i = 0; i &lt; t; i++) {
-            cin &gt;&gt; array[i];
-        }
-        sort(array, array+t);
-        for (int i = 0; i &lt; t-1; i++) {
-            if (array[i] == array[i+1]) {
-                array[i] = 0;
-                array[i+1] = 0;
-                i++;  //跳过下一次循环 
-            }
-        }
-        for (int i = 0; i &lt; t; i++) {
-            if (array[i] != 0) {
-                cout &lt;&lt; array[i] &lt;&lt; endl;
-            }
-        }
-    }
-    
-    return 0;
+    <div class="highlighter-rouge"><pre class="highlight"><code>假设:	 a = b
+稳定:	 a, b --&gt;  a, b
+不稳定:  a, b --&gt;  b, a
+</code></pre>
+    </div>
+  </li>
+</ul>
+
+<h6 id="section-2">内（/外）部排序</h6>
+<ul>
+  <li>内部排序：指的是带排序的记录存放在计算机存储器中进行的排序过程
+    <ul>
+      <li>插入排序</li>
+      <li>交换排序</li>
+      <li>选择排序</li>
+      <li>归并排序</li>
+      <li>计数排序</li>
+    </ul>
+  </li>
+  <li>外部排序：指的是带排序的记录数量很大，以致内存一次不能容纳全部记录，在排序过程中尚需对外存进行访问的排序过程。</li>
+</ul>
+
+<h5 id="section-3">两种基本操作</h5>
+<ul>
+  <li>比较两个关键字的大小</li>
+  <li>将记录从一个位置移动至另外一个记录</li>
+</ul>
+
+<h4 id="section-4">排序算法</h4>
+<ul>
+  <li>下面正式介绍各种排序算法</li>
+  <li>都是从小到大排序</li>
+  <li>以整形为例</li>
+</ul>
+
+<h6 id="section-5">插入排序</h6>
+<ul>
+  <li>直接插入排序，是一种最简单的排序方法</li>
+  <li>
+    <p>基本操作是将一个记录插入到已排好的有序表中从而得到一个新的、记录数增1的有序表。</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">insertSort</span><span class="p">(</span><span class="kt">int</span> <span class="n">test</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">len</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">len</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+          <span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">test</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">j</span><span class="p">;</span>
+          <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">tmp</span> <span class="o">&lt;</span> <span class="n">test</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span> <span class="n">j</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+              <span class="c1">//把比插入元素大的元素后移 
+</span>              <span class="n">test</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">test</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+          <span class="p">}</span>
+          <span class="c1">//找打合适位置插入 
+</span>          <span class="n">test</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+      <span class="p">}</span>
+  <span class="p">}</span>
+</code></pre>
+    </div>
+  </li>
+</ul>
+
+<h6 id="section-6">希尔排序</h6>
+<ul>
+  <li>类似与插入排序</li>
+  <li>改进：
+    <ul>
+      <li>通过比较相距一定间隔的元素来工作；</li>
+      <li>随着每一趟比较所用的距离随着算法的进行而减小；</li>
+      <li>直到只比较相邻元素的最后一趟排序位置。</li>
+    </ul>
+  </li>
+  <li>
+    <p>为此，希尔排序有时也叫缩减增量排序。</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>void shellSort(int test[], int len) {
+  for (int gap = len/2; gap &gt; 0; gap /= 2) {
+      //选取步长 
+      for (int i = gap; i &lt; len; i++) {
+          //以步长进行的选择排序 
+          int tmp = test[i], j;
+          for (j = i; j &gt;= gap &amp;&amp; tmp &lt; test[j-gap]; j -= gap) {
+              test[j] = test[j-gap];
+          }
+          //找到合适位置插入 
+          test[j] = tmp;
+      }
+  }
 }
 </code></pre>
-</div>
+    </div>
+  </li>
+</ul>
+
+<h6 id="section-7">冒泡排序</h6>
+<ul>
+  <li>每一轮都把这轮的最大放到最后的位置</li>
+  <li>如：
+    <ul>
+      <li>第一轮把最大的数字放到最后一位</li>
+      <li>第二轮把最大的数字放到倒数第二位</li>
+      <li>第三轮把最大的数字放到倒数第三位</li>
+      <li>以此类推</li>
+    </ul>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>void bubbleSort(int test[], int len) {
+  for (int i = 1; i &lt; len; i++) {
+      //每一轮都把这轮最大的数放到（‘len-i’位置）
+      for (int j = 0; j &lt; len-i; j++) {
+          if (test[j] &gt; test[j+1]) {
+              int tmp = test[j+1];
+              test[j+1] = test[j];
+              test[j] = tmp;			
+          }
+      }
+  }
+}
+</code></pre>
+    </div>
+  </li>
+</ul>
+
+<h6 id="section-8">选择排序</h6>
+<ul>
+  <li>类似冒泡排序</li>
+  <li>但是交换次数减少，因为冒泡排序是通过每一次交换把数字替换，而选择排序是选出最小一位再交换，效果更好</li>
+  <li>找到每一轮的最小元素，然后替换，直到最后排序完成</li>
+  <li>如：
+    <ul>
+      <li>第一轮把最小的数字放到第一位</li>
+      <li>第二轮把最小的数字放到第二位</li>
+      <li>第三轮把最小的数字放到第三位</li>
+      <li>以此类推。</li>
+    </ul>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>void selectSort(int test[], int len) {
+  for (int i = 0; i &lt; len; ++i) {
+      //记录当前为最小元素 
+      int index = i;
+      //找到最小元素 
+      for (int j = i+1; j &lt; len; ++j) {
+          if (test[j] &lt; test[index]) {
+              index = j;
+          }
+      }
+      //如果找到的最小元素比记录的最小元素要小，那么替换当前最小元素 
+      if (index != i) {
+          int tmp = test[index];
+          test[index] = test[i];
+          test[i] = tmp;
+      }
+  }
+}
+</code></pre>
+    </div>
+  </li>
+</ul>
+
 
 
                 <hr>
@@ -217,15 +351,19 @@ int main() {
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="/2016/03/04/sicily-1"
-                    data-title="Sicily 2005.Lovely Number"
-                    data-url="/2016/03/04/sicily-1/"
+                    data-thread-key="/2016/03/05/algorithm"
+                    data-title="经典排序算法（一）"
+                    data-url="/2016/03/05/algorithm/"
                     data-images="/img/home-bg.jpg"
-                    data-content="
-  思路：
+                    data-content="概述
+
+  排序是计算机程序设计中的一种重要操作，简单的说，可以使任意序列重新排列成一个按关键字有序的序列。
+
+
+
+  好处：
     
-      若测试数据出现的次数为奇数，则输出它。
-      所以，可以先排序，若前后相等，前后都设为0，最后不为0的则可以输出... | Winray | Winray Blog " >
+      有序... | Winray | Winray Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -245,12 +383,12 @@ int main() {
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2016/03/02/lec-spider/" data-toggle="tooltip" data-placement="top" title="lec-spider">&larr; Previous Post</a>
+                        <a href="/2016/03/04/sicily13/" data-toggle="tooltip" data-placement="top" title="Sicily 1034. Forest">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2016/03/04/sicily-2/" data-toggle="tooltip" data-placement="top" title="Sicily 1156. Binary tree">Next Post &rarr;</a>
+                        <a href="/2016/03/06/algorithm/" data-toggle="tooltip" data-placement="top" title="经典排序算法（二）">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -260,9 +398,9 @@ int main() {
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="/2016/03/04/sicily-1"
-                        data-title="Sicily 2005.Lovely Number"
-                        data-url="/2016/03/04/sicily-1/" >
+                        data-thread-key="/2016/03/05/algorithm"
+                        data-title="经典排序算法（一）"
+                        data-url="/2016/03/05/algorithm/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->

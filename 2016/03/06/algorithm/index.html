@@ -10,9 +10,9 @@
     <meta name="keyword"  content="">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>Sicily 2005.Lovely Number - Winray | Winray Blog</title>
+    <title>经典排序算法（二） - Winray | Winray Blog</title>
 
-    <link rel="canonical" href="/2016/03/04/sicily-1/">
+    <link rel="canonical" href="/2016/03/06/algorithm/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -140,17 +140,17 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#sicily" title="sicily">sicily</a>
+                        <a class="tag" href="/tags/#算法" title="算法">算法</a>
                         
                         <a class="tag" href="/tags/#c++" title="c++">c++</a>
                         
                     </div>
-                    <h1>Sicily 2005.Lovely Number</h1>
+                    <h1>经典排序算法（二）</h1>
                     
                     
                     <h2 class="subheading">For study!</h2>
                     
-                    <span class="meta">Posted by Winray on March 4, 2016</span>
+                    <span class="meta">Posted by Winray on March 6, 2016</span>
                 </div>
             </div>
         </div>
@@ -168,46 +168,7 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				<ul>
-  <li>思路：
-    <ul>
-      <li>若测试数据出现的次数为奇数，则输出它。</li>
-      <li>所以，可以先排序，若前后相等，前后都设为0，最后不为0的则可以输出。</li>
-    </ul>
-  </li>
-  <li>具体代码如下：</li>
-</ul>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>#include &lt;iostream&gt;
-#include &lt;algorithm&gt;
-using namespace std;
-
-int main() {
-    int t;
-    while (cin &gt;&gt; t) {
-        int *array = new int[t]; 
-        for (int i = 0; i &lt; t; i++) {
-            cin &gt;&gt; array[i];
-        }
-        sort(array, array+t);
-        for (int i = 0; i &lt; t-1; i++) {
-            if (array[i] == array[i+1]) {
-                array[i] = 0;
-                array[i+1] = 0;
-                i++;  //跳过下一次循环 
-            }
-        }
-        for (int i = 0; i &lt; t; i++) {
-            if (array[i] != 0) {
-                cout &lt;&lt; array[i] &lt;&lt; endl;
-            }
-        }
-    }
-    
-    return 0;
-}
-</code></pre>
-</div>
+				
 
 
                 <hr>
@@ -217,15 +178,12 @@ int main() {
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="/2016/03/04/sicily-1"
-                    data-title="Sicily 2005.Lovely Number"
-                    data-url="/2016/03/04/sicily-1/"
+                    data-thread-key="/2016/03/06/algorithm"
+                    data-title="经典排序算法（二）"
+                    data-url="/2016/03/06/algorithm/"
                     data-images="/img/home-bg.jpg"
                     data-content="
-  思路：
-    
-      若测试数据出现的次数为奇数，则输出它。
-      所以，可以先排序，若前后相等，前后都设为0，最后不为0的则可以输出... | Winray | Winray Blog " >
+ | Winray | Winray Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -245,13 +203,9 @@ int main() {
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2016/03/02/lec-spider/" data-toggle="tooltip" data-placement="top" title="lec-spider">&larr; Previous Post</a>
+                        <a href="/2016/03/05/algorithm/" data-toggle="tooltip" data-placement="top" title="经典排序算法（一）">&larr; Previous Post</a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2016/03/04/sicily-2/" data-toggle="tooltip" data-placement="top" title="Sicily 1156. Binary tree">Next Post &rarr;</a>
-                    </li>
                     
                 </ul>
 
@@ -260,9 +214,9 @@ int main() {
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="/2016/03/04/sicily-1"
-                        data-title="Sicily 2005.Lovely Number"
-                        data-url="/2016/03/04/sicily-1/" >
+                        data-thread-key="/2016/03/06/algorithm"
+                        data-title="经典排序算法（二）"
+                        data-url="/2016/03/06/algorithm/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
