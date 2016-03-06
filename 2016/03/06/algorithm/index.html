@@ -168,7 +168,169 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				
+				<h6 id="section">堆排序</h6>
+<blockquote>
+  <p>堆排序（Heapsort）是指利用堆这种数据结构所设计的一种排序算法。堆积是一个近似完全二叉树的结构，并同时满足堆积的性质：即子结点的键值或索引总是小于（或者大于）它的父节点。</p>
+</blockquote>
+
+<ul>
+  <li>概述
+    <ul>
+      <li>建立N个元素的二叉堆，这个阶段花费O(N)时间</li>
+      <li>然后执行N次deleteMin操作</li>
+      <li>按照顺序，最小的元素先离开堆</li>
+      <li>通过将这些记录到第二个数组然后再将数组拷贝回来，得到N个元素排序</li>
+      <li>由于每个deleteMin花费O(logN)时间，因此总的运行时间是O(NlogN).</li>
+    </ul>
+  </li>
+  <li>堆节点的访问
+    <ul>
+      <li>通常堆是通过一维数组来实现的。在数组起始位置为0的情形中：</li>
+      <li>父节点i的左子节点在位置(2*i+1);</li>
+      <li>父节点i的右子节点在位置(2*i+2);</li>
+      <li>子节点i的父节点在位置floor((i-1)/2)</li>
+    </ul>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>void maxHeapify(int arr[], int start, int end) {
+      //建立父节点指标和子节点指标 
+      int dad = start;
+      int son = dad * 2 + 1;
+
+      //若子节点指标在范围内才做出调整 
+      while (son &lt; end) {
+          //先比较两个子节点大小，选择最大的 
+          if (son + 1 &lt; end &amp;&amp; arr[son] &lt; arr[son + 1])
+              son++;
+
+          //如果父节点大于子节点代表调整完毕，直接跳出函数 
+          //否则父节点内容再继续子节点和孙节点比较 
+          if (arr[dad] &gt; arr[son])
+              return;
+          else {
+              swap(arr[dad], arr[son]);
+              dad = son;
+              son = dad * 2 + 1;
+          }
+      }
+  }
+
+  void heapSort(int test[], int len) {
+      //初始化，i从最后一个父节点开始调整 
+      for (int i = len/2 - 1; i &gt;= 0; --i) {
+          maxHeapify(test, i, len);
+      }
+      for (int i = len-1; i &gt; 0; --i) {
+          swap(test[0], test[i]);
+          maxHeapify(test, 0, i);
+      }
+  }
+</code></pre>
+    </div>
+  </li>
+</ul>
+
+<h6 id="section-1">归并排序</h6>
+<blockquote>
+  <p>归并排序以O(NlogN)为最坏情形运行时间，而所使用的比较次数几乎是最优的。它是递归算法的一个很好的例子。</p>
+</blockquote>
+
+<ul>
+  <li>概述
+    <ul>
+      <li>基本操作是合并两个已排序的表</li>
+      <li>因为两个表是有序的，所以若将输出放到第三个表中则该算法可以通过对输入数据一趟排序来完成。</li>
+      <li>采用分治策略，将问题<code class="highlighter-rouge">分</code>成一些小的问题然后递归求解，而<code class="highlighter-rouge">治</code>的阶段则是将分的阶段解的各答案修补在一起。</li>
+    </ul>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code> void mergeSortR(int arr[], int tmp[], int start, int end) {
+      if (start &gt;= end)
+          return;
+      int len = end-start,
+          mid = (len&gt;&gt;1)+start;
+      //左边排序 
+      int start1 = start, end1 = mid;
+      //右边排序 
+      int start2 = mid+1, end2 = end;
+      mergeSortR(arr, tmp, start1, end1);
+      mergeSortR(arr, tmp, start2, end2);
+
+      //第三方数组的记录 
+      int k = start;
+
+      //两个数组比较排序 
+      while (start1 &lt;= end1 &amp;&amp; start2 &lt;= end2)
+          tmp[k++] = arr[start1] &lt; arr[start2] ? arr[start1++] : arr[start2++];
+      while (start1 &lt;= end1)
+          tmp[k++] = arr[start1++];
+      while (start2 &lt;= end2)
+          tmp[k++] = arr[start2++];
+
+      //第三方数组重新复制给原数组 
+      for (k = start; k &lt;= end; ++k)
+         arr[k] = tmp[k];
+  }
+
+  void mergeSort(int arr[], int len) {
+      int tmp[len] ;
+      mergeSortR(arr, tmp, 0, len-1);
+  }
+</code></pre>
+    </div>
+  </li>
+</ul>
+
+<h6 id="section-2">快速排序</h6>
+<blockquote>
+  <p>像归并排序一样，快速排序也是一种分治的递归算法。</p>
+</blockquote>
+
+<ul>
+  <li>概述
+    <ul>
+      <li>选取枢纽元
+        <ul>
+          <li>安全的方针是随机选取枢纽元。</li>
+          <li>或者三数中值分割法，选取左端和中心位置上的三个元素的中值作为枢纽元。</li>
+        </ul>
+      </li>
+      <li>分割
+        <ul>
+          <li>把枢纽元与最后的元素交换</li>
+          <li>i从第一个元素开始，而j从倒数第二个元素开始</li>
+          <li>把小元素推向左边，大元素推向右边</li>
+        </ul>
+      </li>
+    </ul>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>void quickSortR(int arr[], int start, int end) {
+      if (start &gt;= end)
+          return;
+      int mid = arr[end];
+      int left  = start,
+          right = end-1;
+      while (left &lt; right) {
+          while (arr[left] &lt; mid &amp;&amp; left &lt; right)
+              left++;
+          while (arr[right] &gt;= mid &amp;&amp; left &lt; right)
+              right--;
+          swap(arr[left], arr[right]);
+      }
+      if (arr[left] &gt;= arr[end])
+          swap(arr[left], arr[end]);
+      else
+          ++left;
+      quickSortR(arr, start, left-1);
+      quickSortR(arr, left+1, end);
+  }
+
+  void quickSort(int arr[], int len) {
+      quickSortR(arr, 0, len-1);
+  }
+</code></pre>
+    </div>
+  </li>
+</ul>
+
 
 
                 <hr>
@@ -182,8 +344,9 @@
                     data-title="经典排序算法（二）"
                     data-url="/2016/03/06/algorithm/"
                     data-images="/img/home-bg.jpg"
-                    data-content="
- | Winray | Winray Blog " >
+                    data-content="堆排序
+
+  堆排序（Heapsort）是指利用堆这种数据结构所设计的一种排序算法。堆积是一个近似完全二叉树的结构，并同时满足堆积的性质：即子结点的键值或... | Winray | Winray Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>

@@ -5,13 +5,175 @@
     <description>For study!</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 06 Mar 2016 01:36:45 +0800</pubDate>
-    <lastBuildDate>Sun, 06 Mar 2016 01:36:45 +0800</lastBuildDate>
+    <pubDate>Sun, 06 Mar 2016 20:43:58 +0800</pubDate>
+    <lastBuildDate>Sun, 06 Mar 2016 20:43:58 +0800</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
     
       <item>
         <title>经典排序算法（二）</title>
-        <description>
+        <description>&lt;h6 id=&quot;section&quot;&gt;堆排序&lt;/h6&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;堆排序（Heapsort）是指利用堆这种数据结构所设计的一种排序算法。堆积是一个近似完全二叉树的结构，并同时满足堆积的性质：即子结点的键值或索引总是小于（或者大于）它的父节点。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;概述
+    &lt;ul&gt;
+      &lt;li&gt;建立N个元素的二叉堆，这个阶段花费O(N)时间&lt;/li&gt;
+      &lt;li&gt;然后执行N次deleteMin操作&lt;/li&gt;
+      &lt;li&gt;按照顺序，最小的元素先离开堆&lt;/li&gt;
+      &lt;li&gt;通过将这些记录到第二个数组然后再将数组拷贝回来，得到N个元素排序&lt;/li&gt;
+      &lt;li&gt;由于每个deleteMin花费O(logN)时间，因此总的运行时间是O(NlogN).&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;堆节点的访问
+    &lt;ul&gt;
+      &lt;li&gt;通常堆是通过一维数组来实现的。在数组起始位置为0的情形中：&lt;/li&gt;
+      &lt;li&gt;父节点i的左子节点在位置(2*i+1);&lt;/li&gt;
+      &lt;li&gt;父节点i的右子节点在位置(2*i+2);&lt;/li&gt;
+      &lt;li&gt;子节点i的父节点在位置floor((i-1)/2)&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;void maxHeapify(int arr[], int start, int end) {
+      //建立父节点指标和子节点指标 
+      int dad = start;
+      int son = dad * 2 + 1;
+
+      //若子节点指标在范围内才做出调整 
+      while (son &amp;lt; end) {
+          //先比较两个子节点大小，选择最大的 
+          if (son + 1 &amp;lt; end &amp;amp;&amp;amp; arr[son] &amp;lt; arr[son + 1])
+              son++;
+
+          //如果父节点大于子节点代表调整完毕，直接跳出函数 
+          //否则父节点内容再继续子节点和孙节点比较 
+          if (arr[dad] &amp;gt; arr[son])
+              return;
+          else {
+              swap(arr[dad], arr[son]);
+              dad = son;
+              son = dad * 2 + 1;
+          }
+      }
+  }
+
+  void heapSort(int test[], int len) {
+      //初始化，i从最后一个父节点开始调整 
+      for (int i = len/2 - 1; i &amp;gt;= 0; --i) {
+          maxHeapify(test, i, len);
+      }
+      for (int i = len-1; i &amp;gt; 0; --i) {
+          swap(test[0], test[i]);
+          maxHeapify(test, 0, i);
+      }
+  }
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;section-1&quot;&gt;归并排序&lt;/h6&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;归并排序以O(NlogN)为最坏情形运行时间，而所使用的比较次数几乎是最优的。它是递归算法的一个很好的例子。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;概述
+    &lt;ul&gt;
+      &lt;li&gt;基本操作是合并两个已排序的表&lt;/li&gt;
+      &lt;li&gt;因为两个表是有序的，所以若将输出放到第三个表中则该算法可以通过对输入数据一趟排序来完成。&lt;/li&gt;
+      &lt;li&gt;采用分治策略，将问题&lt;code class=&quot;highlighter-rouge&quot;&gt;分&lt;/code&gt;成一些小的问题然后递归求解，而&lt;code class=&quot;highlighter-rouge&quot;&gt;治&lt;/code&gt;的阶段则是将分的阶段解的各答案修补在一起。&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; void mergeSortR(int arr[], int tmp[], int start, int end) {
+      if (start &amp;gt;= end)
+          return;
+      int len = end-start,
+          mid = (len&amp;gt;&amp;gt;1)+start;
+      //左边排序 
+      int start1 = start, end1 = mid;
+      //右边排序 
+      int start2 = mid+1, end2 = end;
+      mergeSortR(arr, tmp, start1, end1);
+      mergeSortR(arr, tmp, start2, end2);
+
+      //第三方数组的记录 
+      int k = start;
+
+      //两个数组比较排序 
+      while (start1 &amp;lt;= end1 &amp;amp;&amp;amp; start2 &amp;lt;= end2)
+          tmp[k++] = arr[start1] &amp;lt; arr[start2] ? arr[start1++] : arr[start2++];
+      while (start1 &amp;lt;= end1)
+          tmp[k++] = arr[start1++];
+      while (start2 &amp;lt;= end2)
+          tmp[k++] = arr[start2++];
+
+      //第三方数组重新复制给原数组 
+      for (k = start; k &amp;lt;= end; ++k)
+         arr[k] = tmp[k];
+  }
+
+  void mergeSort(int arr[], int len) {
+      int tmp[len] ;
+      mergeSortR(arr, tmp, 0, len-1);
+  }
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;section-2&quot;&gt;快速排序&lt;/h6&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;像归并排序一样，快速排序也是一种分治的递归算法。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;概述
+    &lt;ul&gt;
+      &lt;li&gt;选取枢纽元
+        &lt;ul&gt;
+          &lt;li&gt;安全的方针是随机选取枢纽元。&lt;/li&gt;
+          &lt;li&gt;或者三数中值分割法，选取左端和中心位置上的三个元素的中值作为枢纽元。&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;分割
+        &lt;ul&gt;
+          &lt;li&gt;把枢纽元与最后的元素交换&lt;/li&gt;
+          &lt;li&gt;i从第一个元素开始，而j从倒数第二个元素开始&lt;/li&gt;
+          &lt;li&gt;把小元素推向左边，大元素推向右边&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;void quickSortR(int arr[], int start, int end) {
+      if (start &amp;gt;= end)
+          return;
+      int mid = arr[end];
+      int left  = start,
+          right = end-1;
+      while (left &amp;lt; right) {
+          while (arr[left] &amp;lt; mid &amp;amp;&amp;amp; left &amp;lt; right)
+              left++;
+          while (arr[right] &amp;gt;= mid &amp;amp;&amp;amp; left &amp;lt; right)
+              right--;
+          swap(arr[left], arr[right]);
+      }
+      if (arr[left] &amp;gt;= arr[end])
+          swap(arr[left], arr[end]);
+      else
+          ++left;
+      quickSortR(arr, start, left-1);
+      quickSortR(arr, left+1, end);
+  }
+
+  void quickSort(int arr[], int len) {
+      quickSortR(arr, 0, len-1);
+  }
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
 </description>
         <pubDate>Sun, 06 Mar 2016 00:00:00 +0800</pubDate>
         <link>/2016/03/06/algorithm/</link>
@@ -106,7 +268,7 @@
 
 &lt;h6 id=&quot;section-6&quot;&gt;希尔排序&lt;/h6&gt;
 &lt;ul&gt;
-  &lt;li&gt;类似与插入排序&lt;/li&gt;
+  &lt;li&gt;插入排序改进版&lt;/li&gt;
   &lt;li&gt;改进：
     &lt;ul&gt;
       &lt;li&gt;通过比较相距一定间隔的元素来工作；&lt;/li&gt;
