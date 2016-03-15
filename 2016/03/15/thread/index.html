@@ -10,9 +10,9 @@
     <meta name="keyword"  content="">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>Sicily 1129. ISBN - Winray | Winray Blog</title>
+    <title>进程间通信 - Winray | Winray Blog</title>
 
-    <link rel="canonical" href="/2016/03/04/sicily-7/">
+    <link rel="canonical" href="/2016/03/15/thread/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -140,17 +140,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#sicily" title="sicily">sicily</a>
-                        
-                        <a class="tag" href="/tags/#c++" title="c++">c++</a>
+                        <a class="tag" href="/tags/#操作系统" title="操作系统">操作系统</a>
                         
                     </div>
-                    <h1>Sicily 1129. ISBN</h1>
+                    <h1>进程间通信</h1>
                     
                     
                     <h2 class="subheading">For study!</h2>
                     
-                    <span class="meta">Posted by Winray on March 4, 2016</span>
+                    <span class="meta">Posted by Winray on March 15, 2016</span>
                 </div>
             </div>
         </div>
@@ -168,43 +166,62 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				<ul>
-  <li>思路：
+				<h6 id="section">进程间通信</h6>
+<blockquote>
+  <p>进程间通信（IPC，Interprocess communication）是一组编程接口，让程序员能够协调不同的程序进程，使之能在一个操作系统里同时运行。这使得一个程序能够在同一时间里处理许多用户的要求。因为即使只有一个用户发出要求，也可能导致一个操作系统中多个进程的运行，进程之间必须互相通话。IPC接口就提供了这种可能性。每个IPC方法均有它自己的优点和局限性，因此，对于单个程序而言使用所有的IPC方法是不常见的。</p>
+</blockquote>
+
+<h6 id="linux">linux下进程间通信的几种主要手段简介：</h6>
+<ul>
+  <li>管道（<code class="highlighter-rouge">Pipe</code>）及有名管道（<code class="highlighter-rouge">named pipe</code>）：管道可用于具有亲缘关系进程间的通信，有名管道克服了管道没有名字的限制，因此，除具有管道所具有的功能外，它还允许无亲缘关系进程间的通信；
     <ul>
-      <li>这道题比较简单，只要看懂题目就应该可以了。那就解释下题目好了，题目意思是按照权值计算这10个数字和，依据这个和计算还差多少可以对11整除，若还差10，那么在这个结尾加上“-X”，若不是10则输出“-”加上还差多少可以整除的那个数。</li>
+      <li><code class="highlighter-rouge">ls | pr | lpr</code></li>
+      <li>管道是单向的、先进先出的、无结构的、固定大小的字节流，它把一个进程的标准输出和另一个进程的标准输入连接在一起。写进程在管道的尾端写入数据，读进程在管道的首端读出数据。数据读出后将从管道中移走，其它读进程都不能再读到这些数据。管道提供了简单的流控制机制。进程试图读空管道时，在有数据写入管道前，进程将一直阻塞。同样，管道已经满时，进程再试图写管道，在其它进程从管道中移走数据之前，写进程将一直阻塞。</li>
     </ul>
   </li>
-  <li>具体代码如下：</li>
+  <li>
+    <p>信号（<code class="highlighter-rouge">Signal</code>）：信号是比较复杂的通信方式，用于通知接受进程有某种事件发生，除了用于进程间通信外，进程还可以发送信号给进程本身；linux除了支持Unix早期信号语义函数sigal外，还支持语义符合Posix.1标准的信号函数sigaction（实际上，该函数是基于BSD的，BSD为了实现可靠信号机制，又能够统一对外接口，用sigaction函数重新实现了signal函数）；</p>
+  </li>
+  <li>
+    <p>报文（<code class="highlighter-rouge">Message</code>）队列（消息队列）：消息队列是消息的链接表，包括Posix消息队列system V消息队列。有足够权限的进程可以向队列中添加消息，被赋予读权限的进程则可以读走队列中的消息。消息队列克服了信号承载信息量少，管道只能承载无格式字节流以及缓冲区大小受限等缺点。</p>
+  </li>
+  <li>
+    <p>共享内存：使得多个进程可以访问同一块内存空间，是最快的可用IPC形式。是针对其他通信机制运行效率较低而设计的。往往与其它通信机制，如信号量结合使用，来达到进程间的同步及互斥。</p>
+  </li>
+  <li>信号量（<code class="highlighter-rouge">semaphore</code>）：主要作为进程间以及同一进程不同线程之间的同步手段。
+    <ul>
+      <li>信号量(<code class="highlighter-rouge">Semaphore</code>)，有时被称为信号灯，是在多线程环境下使用的一种设施，是可以用来保证两个或多个关键代码段不被并发调用。在进入一个关键代码段之前，线程必须获取一个信号量；一旦该关键代码段完成了，那么该线程必须释放信号量。其它想进入该关键代码段的线程必须等待直到第一个线程释放信号量。为了完成这个过程，需要创建一个信号量VI，然后将Acquire Semaphore VI以及Release Semaphore VI分别放置在每个关键代码段的首末端。确认这些信号量VI引用的是初始创建的信号</li>
+      <li>互斥量是信号量的一个特例，信号量的引用计数为n，而互斥量为1，信号量有一个等待队列，当信号量引用计数大于0时就唤醒等待队列上的线程可以访问资源；</li>
+      <li>临界区是你需要用信号量，互斥量或锁保护的一段代码，避免多个线程并发的访问处于同一个临界区中的资源；</li>
+    </ul>
+  </li>
+  <li>套接口（<code class="highlighter-rouge">Socket</code>）：更为一般的进程间通信机制，可用于不同机器之间的进程间通信。起初是由Unix系统的BSD分支开发出来的，但现在一般可以移植到其它类Unix系统上：Linux和System V的变种都支持套接字。</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>#include &lt;iostream&gt;
-#include &lt;string&gt;
-using namespace std;
+<h6 id="section-1">注意</h6>
+<ul>
+  <li>一般来说，linux下的进程包含以下几个关键要素：
+    <ul>
+      <li>有一段可执行程序；</li>
+      <li>有专用的系统堆栈空间；</li>
+      <li>内核中有它的控制块（进程控制块），描述进程所占用的资源，这样，进程才能接受内核的调度；</li>
+      <li>具有独立的存储空间</li>
+    </ul>
+  </li>
+  <li>进程和线程有时候并不完全区分，而往往根据上下文理解其含义。</li>
+  <li>进程间通信与线程间通信之间的关系?
+    <ul>
+      <li>因为WINDOWS运行的实体是线程, 狭义上的进程间通信其实是指分属于不同进程的线程之间的通讯.而单个进程之间的线程同步问题可归并为一种特殊的进程通信.它要用到内核支持的系统调用来保持线程之间同步. 通常用到的一些线程同步方法包括:Event, Mutex,信号量Semaphore,临界区资源等.</li>
+    </ul>
+  </li>
+</ul>
 
-int Sum(string x) {
-    int sum = 0;
-    int weight = 10;
-    for (int i = 0; i &lt; x.size(); i++) {
-        if (x[i] &gt;= '0'&amp;&amp;x[i] &lt;= '9') {
-            sum += (x[i]-'0')*(weight--);
-        }
-    }
-    return sum;
-}
+<h6 id="section-2">参考</h6>
+<ul>
+  <li><a href="https://www.ibm.com/developerworks/cn/linux/l-ipc/">https://www.ibm.com/developerworks/cn/linux/l-ipc/</a></li>
+  <li><a href="http://baike.baidu.com/view/1492468.htm">http://baike.baidu.com/view/1492468.htm</a></li>
+</ul>
 
-int main() {
-    string test;
-    while (cin &gt;&gt; test) {
-        int sum = Sum(test);
-        int check_digit = sum%11 == 0 ? 0 : 11-sum%11;
-        check_digit == 10 ? cout &lt;&lt; test &lt;&lt; "-X\n"
-            : cout &lt;&lt; test &lt;&lt; "-" &lt;&lt; check_digit &lt;&lt; endl;
-    }
-    
-    return 0;
-}
-</code></pre>
-</div>
 
 
                 <hr>
@@ -214,14 +231,13 @@ int main() {
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="/2016/03/04/sicily-7"
-                    data-title="Sicily 1129. ISBN"
-                    data-url="/2016/03/04/sicily-7/"
+                    data-thread-key="/2016/03/15/thread"
+                    data-title="进程间通信"
+                    data-url="/2016/03/15/thread/"
                     data-images="/img/home-bg.jpg"
-                    data-content="
-  思路：
-    
-      这道题比较简单，只要看懂题目就应该可以了。那就解释下题目好了，题目意思是按照权值计算这10个数字和，依据这个和计算还差... | Winray | Winray Blog " >
+                    data-content="进程间通信
+
+  进程间通信（IPC，Interprocess communication）是一组编程接口，让程序员能够协调不同的程序进程，使之能在一个操... | Winray | Winray Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -241,13 +257,9 @@ int main() {
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2016/03/04/sicily-6/" data-toggle="tooltip" data-placement="top" title="Sicily 1133. SPAM">&larr; Previous Post</a>
+                        <a href="/2016/03/06/algorithm/" data-toggle="tooltip" data-placement="top" title="经典排序算法（二）">&larr; Previous Post</a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2016/03/04/sicily-8/" data-toggle="tooltip" data-placement="top" title="Sicily 1021. Couples">Next Post &rarr;</a>
-                    </li>
                     
                 </ul>
 
@@ -256,9 +268,9 @@ int main() {
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="/2016/03/04/sicily-7"
-                        data-title="Sicily 1129. ISBN"
-                        data-url="/2016/03/04/sicily-7/" >
+                        data-thread-key="/2016/03/15/thread"
+                        data-title="进程间通信"
+                        data-url="/2016/03/15/thread/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->

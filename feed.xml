@@ -5,9 +5,77 @@
     <description>For study!</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 06 Mar 2016 20:43:58 +0800</pubDate>
-    <lastBuildDate>Sun, 06 Mar 2016 20:43:58 +0800</lastBuildDate>
+    <pubDate>Wed, 16 Mar 2016 00:16:42 +0800</pubDate>
+    <lastBuildDate>Wed, 16 Mar 2016 00:16:42 +0800</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
+    
+      <item>
+        <title>进程间通信</title>
+        <description>&lt;h6 id=&quot;section&quot;&gt;进程间通信&lt;/h6&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;进程间通信（IPC，Interprocess communication）是一组编程接口，让程序员能够协调不同的程序进程，使之能在一个操作系统里同时运行。这使得一个程序能够在同一时间里处理许多用户的要求。因为即使只有一个用户发出要求，也可能导致一个操作系统中多个进程的运行，进程之间必须互相通话。IPC接口就提供了这种可能性。每个IPC方法均有它自己的优点和局限性，因此，对于单个程序而言使用所有的IPC方法是不常见的。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h6 id=&quot;linux&quot;&gt;linux下进程间通信的几种主要手段简介：&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;管道（&lt;code class=&quot;highlighter-rouge&quot;&gt;Pipe&lt;/code&gt;）及有名管道（&lt;code class=&quot;highlighter-rouge&quot;&gt;named pipe&lt;/code&gt;）：管道可用于具有亲缘关系进程间的通信，有名管道克服了管道没有名字的限制，因此，除具有管道所具有的功能外，它还允许无亲缘关系进程间的通信；
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ls | pr | lpr&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;管道是单向的、先进先出的、无结构的、固定大小的字节流，它把一个进程的标准输出和另一个进程的标准输入连接在一起。写进程在管道的尾端写入数据，读进程在管道的首端读出数据。数据读出后将从管道中移走，其它读进程都不能再读到这些数据。管道提供了简单的流控制机制。进程试图读空管道时，在有数据写入管道前，进程将一直阻塞。同样，管道已经满时，进程再试图写管道，在其它进程从管道中移走数据之前，写进程将一直阻塞。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;信号（&lt;code class=&quot;highlighter-rouge&quot;&gt;Signal&lt;/code&gt;）：信号是比较复杂的通信方式，用于通知接受进程有某种事件发生，除了用于进程间通信外，进程还可以发送信号给进程本身；linux除了支持Unix早期信号语义函数sigal外，还支持语义符合Posix.1标准的信号函数sigaction（实际上，该函数是基于BSD的，BSD为了实现可靠信号机制，又能够统一对外接口，用sigaction函数重新实现了signal函数）；&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;报文（&lt;code class=&quot;highlighter-rouge&quot;&gt;Message&lt;/code&gt;）队列（消息队列）：消息队列是消息的链接表，包括Posix消息队列system V消息队列。有足够权限的进程可以向队列中添加消息，被赋予读权限的进程则可以读走队列中的消息。消息队列克服了信号承载信息量少，管道只能承载无格式字节流以及缓冲区大小受限等缺点。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;共享内存：使得多个进程可以访问同一块内存空间，是最快的可用IPC形式。是针对其他通信机制运行效率较低而设计的。往往与其它通信机制，如信号量结合使用，来达到进程间的同步及互斥。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;信号量（&lt;code class=&quot;highlighter-rouge&quot;&gt;semaphore&lt;/code&gt;）：主要作为进程间以及同一进程不同线程之间的同步手段。
+    &lt;ul&gt;
+      &lt;li&gt;信号量(&lt;code class=&quot;highlighter-rouge&quot;&gt;Semaphore&lt;/code&gt;)，有时被称为信号灯，是在多线程环境下使用的一种设施，是可以用来保证两个或多个关键代码段不被并发调用。在进入一个关键代码段之前，线程必须获取一个信号量；一旦该关键代码段完成了，那么该线程必须释放信号量。其它想进入该关键代码段的线程必须等待直到第一个线程释放信号量。为了完成这个过程，需要创建一个信号量VI，然后将Acquire Semaphore VI以及Release Semaphore VI分别放置在每个关键代码段的首末端。确认这些信号量VI引用的是初始创建的信号&lt;/li&gt;
+      &lt;li&gt;互斥量是信号量的一个特例，信号量的引用计数为n，而互斥量为1，信号量有一个等待队列，当信号量引用计数大于0时就唤醒等待队列上的线程可以访问资源；&lt;/li&gt;
+      &lt;li&gt;临界区是你需要用信号量，互斥量或锁保护的一段代码，避免多个线程并发的访问处于同一个临界区中的资源；&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;套接口（&lt;code class=&quot;highlighter-rouge&quot;&gt;Socket&lt;/code&gt;）：更为一般的进程间通信机制，可用于不同机器之间的进程间通信。起初是由Unix系统的BSD分支开发出来的，但现在一般可以移植到其它类Unix系统上：Linux和System V的变种都支持套接字。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;section-1&quot;&gt;注意&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;一般来说，linux下的进程包含以下几个关键要素：
+    &lt;ul&gt;
+      &lt;li&gt;有一段可执行程序；&lt;/li&gt;
+      &lt;li&gt;有专用的系统堆栈空间；&lt;/li&gt;
+      &lt;li&gt;内核中有它的控制块（进程控制块），描述进程所占用的资源，这样，进程才能接受内核的调度；&lt;/li&gt;
+      &lt;li&gt;具有独立的存储空间&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;进程和线程有时候并不完全区分，而往往根据上下文理解其含义。&lt;/li&gt;
+  &lt;li&gt;进程间通信与线程间通信之间的关系?
+    &lt;ul&gt;
+      &lt;li&gt;因为WINDOWS运行的实体是线程, 狭义上的进程间通信其实是指分属于不同进程的线程之间的通讯.而单个进程之间的线程同步问题可归并为一种特殊的进程通信.它要用到内核支持的系统调用来保持线程之间同步. 通常用到的一些线程同步方法包括:Event, Mutex,信号量Semaphore,临界区资源等.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id=&quot;section-2&quot;&gt;参考&lt;/h6&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.ibm.com/developerworks/cn/linux/l-ipc/&quot;&gt;https://www.ibm.com/developerworks/cn/linux/l-ipc/&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://baike.baidu.com/view/1492468.htm&quot;&gt;http://baike.baidu.com/view/1492468.htm&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        <pubDate>Tue, 15 Mar 2016 00:00:00 +0800</pubDate>
+        <link>/2016/03/15/thread/</link>
+        <guid isPermaLink="true">/2016/03/15/thread/</guid>
+        
+        <category>操作系统</category>
+        
+        
+      </item>
     
       <item>
         <title>经典排序算法（二）</title>
@@ -916,78 +984,6 @@ int main() {
         <pubDate>Fri, 04 Mar 2016 00:00:00 +0800</pubDate>
         <link>/2016/03/04/sicily-7/</link>
         <guid isPermaLink="true">/2016/03/04/sicily-7/</guid>
-        
-        <category>sicily</category>
-        
-        <category>c++</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Sicily 1133. SPAM</title>
-        <description>&lt;ul&gt;
-  &lt;li&gt;思路：
-    &lt;ul&gt;
-      &lt;li&gt;题目意思是说在‘@’的前后出现题目给定的合法字符或者不连续出现‘.’字符的话，这个就是合理的输出。那么以@为中心，向前，向后扫描，当扫描到不符合字符时，记录此时位置，以前后为区间，输出字符。&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;具体代码如下：&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
-#include &amp;lt;string&amp;gt;
-using namespace std;
-
-bool is_ok(char ch) {
-    if ((ch &amp;gt;= &#39;A&#39;&amp;amp;&amp;amp;ch &amp;lt;= &#39;Z&#39;) || (ch &amp;gt;= &#39;a&#39;&amp;amp;&amp;amp;ch &amp;lt;= &#39;z&#39;) ||
-        (ch &amp;gt;= &#39;0&#39;&amp;amp;&amp;amp;ch &amp;lt;= &#39;9&#39;) || ch == &#39;-&#39;||ch == &#39;_&#39;) {
-           return true;
-    }
-    return false;
-}
-
-int main() {
-    string test;
-    while (getline(cin, test)) {
-        if (test.size() == 0) continue;
-        for (int i = 1; i &amp;lt; test.size()-1; i++) {
-            if (test[i] == &#39;@&#39;&amp;amp;&amp;amp;is_ok(test[i-1])&amp;amp;&amp;amp;is_ok(test[i+1])) {
-                int begin, end;
-                for (begin = i-1; begin &amp;gt;= 0; begin--) {
-                    if ((test[begin] == &#39;.&#39;&amp;amp;&amp;amp;test[begin+1] == &#39;.&#39;)) {
-                        break;
-                    }
-                    if (test[begin] != &#39;.&#39;&amp;amp;&amp;amp;!is_ok(test[begin])) {
-                        break;
-                    }
-                }
-                if (test[begin+1] == &#39;.&#39;) begin++;
-                for (end = i+1; end &amp;lt; test.size(); end++) {
-                    if ((test[end] == &#39;.&#39;&amp;amp;&amp;amp;test[end-1] == &#39;.&#39;)) {
-                        break;
-                    }
-                    if (test[end] != &#39;.&#39;&amp;amp;&amp;amp;!is_ok(test[end])) {
-                        break;
-                    }
-                }
-                if (test[end-1] == &#39;.&#39;) end--;
-                for (int j = begin+1; j &amp;lt;= end-1; j++) {
-                    cout &amp;lt;&amp;lt; test[j];
-                }
-                cout &amp;lt;&amp;lt; endl;
-            }
-        }
-     }
-    
-    return 0;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-</description>
-        <pubDate>Fri, 04 Mar 2016 00:00:00 +0800</pubDate>
-        <link>/2016/03/04/sicily-6/</link>
-        <guid isPermaLink="true">/2016/03/04/sicily-6/</guid>
         
         <category>sicily</category>
         
