@@ -5,9 +5,107 @@
     <description>For study!</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 16 Mar 2016 00:16:42 +0800</pubDate>
-    <lastBuildDate>Wed, 16 Mar 2016 00:16:42 +0800</lastBuildDate>
+    <pubDate>Sat, 13 Aug 2016 11:43:18 +0800</pubDate>
+    <lastBuildDate>Sat, 13 Aug 2016 11:43:18 +0800</lastBuildDate>
     <generator>Jekyll v3.1.1</generator>
+    
+      <item>
+        <title>满减优惠</title>
+        <description>&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;题目介绍:&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;时间限制:10000ms
+单点时限:1000ms
+内存限制:256MB
+
+描述
+最近天气炎热，小Ho天天宅在家里叫外卖。他常吃的一家餐馆一共有N道菜品，价格分别是A1, A2, ... AN元。
+并且如果消费总计满X元，还能享受优惠。小Ho是一个不薅羊毛不舒服斯基的人，他希望选择若干道不同的菜品，
+使得总价在不低于X元的同时尽量低。
+你能算出这一餐小Ho最少消费多少元吗？
+     
+Input
+第一行包含两个整数N和X，(1 &amp;lt;= N &amp;lt;= 20, 1 &amp;lt;= X &amp;lt;= 100)
+
+第二行包含N个整数A1, A2, ...， AN。(1 &amp;lt;= Ai &amp;lt;= 100) 
+     
+Output
+输出最少的消费。如果小Ho把N道菜都买了还不能达到X元的优惠标准，输出-1。
+     
+Sample Input
+10 50
+9 9 9 9 9 9 9 9 9 8
+Sample Output
+53
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;转发、借鉴&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;思路：
+    &lt;ul&gt;
+      &lt;li&gt;暴力枚举。&lt;/li&gt;
+      &lt;li&gt;巧妙利用二进制。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;具体代码如下：&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;vector&amp;gt;
+  
+using namespace std;
+  
+int main(void)
+{
+    int n, x, sum = 0;
+    cin &amp;gt;&amp;gt; n &amp;gt;&amp;gt; x;
+    vector&amp;lt;int&amp;gt; nums(n);
+    for (int i = 0; i &amp;lt; n; ++i) {
+        cin &amp;gt;&amp;gt; nums[i];
+        sum += nums[i];
+    }
+    if (sum &amp;lt; x) {
+        cout &amp;lt;&amp;lt; -1 &amp;lt;&amp;lt; endl;
+        return 0;
+    }
+  
+    int ret = sum;
+    for (int i = 1, iend = 1 &amp;lt;&amp;lt; n; i &amp;lt; iend; ++i) {
+        if (ret == x)
+            break;
+        int cur = 0;
+        for (int j = 0; j &amp;lt; n; ++j) {
+            if (((1 &amp;lt;&amp;lt; j) &amp;amp; i)) // select jth number from nums
+                cur += nums[j];
+            if (cur &amp;gt;= x) { // because there is no negative number in nums
+                break;
+            }
+        }
+        // update minimum value greater than x
+        if (cur &amp;gt;= x &amp;amp;&amp;amp; cur &amp;lt; ret)
+            ret = cur;
+    }
+    cout &amp;lt;&amp;lt; ret &amp;lt;&amp;lt; endl;
+    return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Sat, 13 Aug 2016 00:00:00 +0800</pubDate>
+        <link>/2016/08/13/algorithm/</link>
+        <guid isPermaLink="true">/2016/08/13/algorithm/</guid>
+        
+        <category>algorithm</category>
+        
+        <category>c++</category>
+        
+        
+      </item>
     
       <item>
         <title>进程间通信</title>
@@ -933,57 +1031,6 @@ int main() {
         <pubDate>Fri, 04 Mar 2016 00:00:00 +0800</pubDate>
         <link>/2016/03/04/sicily-8/</link>
         <guid isPermaLink="true">/2016/03/04/sicily-8/</guid>
-        
-        <category>sicily</category>
-        
-        <category>c++</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Sicily 1129. ISBN</title>
-        <description>&lt;ul&gt;
-  &lt;li&gt;思路：
-    &lt;ul&gt;
-      &lt;li&gt;这道题比较简单，只要看懂题目就应该可以了。那就解释下题目好了，题目意思是按照权值计算这10个数字和，依据这个和计算还差多少可以对11整除，若还差10，那么在这个结尾加上“-X”，若不是10则输出“-”加上还差多少可以整除的那个数。&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;具体代码如下：&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#include &amp;lt;iostream&amp;gt;
-#include &amp;lt;string&amp;gt;
-using namespace std;
-
-int Sum(string x) {
-    int sum = 0;
-    int weight = 10;
-    for (int i = 0; i &amp;lt; x.size(); i++) {
-        if (x[i] &amp;gt;= &#39;0&#39;&amp;amp;&amp;amp;x[i] &amp;lt;= &#39;9&#39;) {
-            sum += (x[i]-&#39;0&#39;)*(weight--);
-        }
-    }
-    return sum;
-}
-
-int main() {
-    string test;
-    while (cin &amp;gt;&amp;gt; test) {
-        int sum = Sum(test);
-        int check_digit = sum%11 == 0 ? 0 : 11-sum%11;
-        check_digit == 10 ? cout &amp;lt;&amp;lt; test &amp;lt;&amp;lt; &quot;-X\n&quot;
-            : cout &amp;lt;&amp;lt; test &amp;lt;&amp;lt; &quot;-&quot; &amp;lt;&amp;lt; check_digit &amp;lt;&amp;lt; endl;
-    }
-    
-    return 0;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-</description>
-        <pubDate>Fri, 04 Mar 2016 00:00:00 +0800</pubDate>
-        <link>/2016/03/04/sicily-7/</link>
-        <guid isPermaLink="true">/2016/03/04/sicily-7/</guid>
         
         <category>sicily</category>
         

@@ -10,9 +10,9 @@
     <meta name="keyword"  content="">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>Sicily shortest path in unweighted graph - Winray | Winray Blog</title>
+    <title>满减优惠 - Winray | Winray Blog</title>
 
-    <link rel="canonical" href="/2016/03/04/sicily11/">
+    <link rel="canonical" href="/2016/08/13/algorithm/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -140,17 +140,17 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#sicily" title="sicily">sicily</a>
+                        <a class="tag" href="/tags/#algorithm" title="algorithm">algorithm</a>
                         
                         <a class="tag" href="/tags/#c++" title="c++">c++</a>
                         
                     </div>
-                    <h1>Sicily shortest path in unweighted graph</h1>
+                    <h1>满减优惠</h1>
                     
                     
                     <h2 class="subheading">For study!</h2>
                     
-                    <span class="meta">Posted by Winray on March 4, 2016</span>
+                    <span class="meta">Posted by Winray on August 13, 2016</span>
                 </div>
             </div>
         </div>
@@ -169,88 +169,89 @@
                 post-container">
 
 				<ul>
-  <li>题目介绍：</li>
-</ul>
+  <li>
+    <p>题目介绍:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>输入一个无向图，指定一个顶点s开始bfs遍历，求出s到图中每个点的最短距离。
+    <div class="highlighter-rouge"><pre class="highlight"><code>时间限制:10000ms
+单点时限:1000ms
+内存限制:256MB
 
-如果不存在s到t的路径，则记s到t的距离为-1。
- 
+描述
+最近天气炎热，小Ho天天宅在家里叫外卖。他常吃的一家餐馆一共有N道菜品，价格分别是A1, A2, ... AN元。
+并且如果消费总计满X元，还能享受优惠。小Ho是一个不薅羊毛不舒服斯基的人，他希望选择若干道不同的菜品，
+使得总价在不低于X元的同时尽量低。
+你能算出这一餐小Ho最少消费多少元吗？
+     
 Input
-输入的第一行包含两个整数n和m，n是图的顶点数，m是边数。1&lt;=n&lt;=1000，0&lt;=m&lt;=10000。
+第一行包含两个整数N和X，(1 &lt;= N &lt;= 20, 1 &lt;= X &lt;= 100)
 
-以下m行，每行是一个数对v y，表示存在边(v,y)。顶点编号从1开始。 
- 
+第二行包含N个整数A1, A2, ...， AN。(1 &lt;= Ai &lt;= 100) 
+     
 Output
-记s=1，在一行中依次输出：顶点1到s的最短距离，顶点2到s的最短距离，...，顶点n到s的最短距离。
-
-每项输出之后加一个空格，包括最后一项。
- 
+输出最少的消费。如果小Ho把N道菜都买了还不能达到X元的优惠标准，输出-1。
+     
 Sample Input
-5 3
-1 2
-1 3
-2 4
+10 50
+9 9 9 9 9 9 9 9 9 8
 Sample Output
-0 1 1 2 -1 
+53
 </code></pre>
-</div>
-
-<ul>
+    </div>
+  </li>
+  <li>
+    <p>转发、借鉴</p>
+  </li>
   <li>思路：
     <ul>
-      <li>利用广度搜索，标记层数，依次计算距离即可。</li>
+      <li>暴力枚举。</li>
+      <li>巧妙利用二进制。</li>
     </ul>
   </li>
-  <li>具体代码如下：</li>
-</ul>
+  <li>
+    <p>具体代码如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>#include &lt;iostream&gt;
-#include &lt;queue&gt;
+    <div class="highlighter-rouge"><pre class="highlight"><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+  
 using namespace std;
-
-bool path[1001][1001];
-int shortest[1001];
-
-int main() {
-    int n, m;
-    cin &gt;&gt; n &gt;&gt; m;
-    
-    for (int i = 1; i &lt;= m; i++) {
-        int node1, node2;
-        cin &gt;&gt; node1 &gt;&gt; node2;
-        path[node1][node2] = true;
-        path[node2][node1] = true;
+  
+int main(void)
+{
+    int n, x, sum = 0;
+    cin &gt;&gt; n &gt;&gt; x;
+    vector&lt;int&gt; nums(n);
+    for (int i = 0; i &lt; n; ++i) {
+        cin &gt;&gt; nums[i];
+        sum += nums[i];
     }
-    
-    for (int i = 1; i &lt;= n; i++)
-        i == 1 ? shortest[i] = 0 : shortest[i] = -1;
-    
-    int distance = 0;
-    queue&lt;int&gt; store;
-    store.push(1);
-    while (!store.empty()) {
-        int size = store.size();
-        distance++;
-        while (size--) {
-            for (int i = 1; i &lt;= n; i++) {
-                if (path[store.front()][i] &amp;&amp; shortest[i] == -1) {
-                    shortest[i] = distance;
-                    store.push(i);
-                }
+    if (sum &lt; x) {
+        cout &lt;&lt; -1 &lt;&lt; endl;
+        return 0;
+    }
+  
+    int ret = sum;
+    for (int i = 1, iend = 1 &lt;&lt; n; i &lt; iend; ++i) {
+        if (ret == x)
+            break;
+        int cur = 0;
+        for (int j = 0; j &lt; n; ++j) {
+            if (((1 &lt;&lt; j) &amp; i)) // select jth number from nums
+                cur += nums[j];
+            if (cur &gt;= x) { // because there is no negative number in nums
+                break;
             }
-            store.pop();
         }
+        // update minimum value greater than x
+        if (cur &gt;= x &amp;&amp; cur &lt; ret)
+            ret = cur;
     }
-    
-    for (int i = 1; i &lt;= n; i++)
-        cout &lt;&lt; shortest[i] &lt;&lt; " ";
-    cout &lt;&lt; endl;
-    
+    cout &lt;&lt; ret &lt;&lt; endl;
     return 0;
 }
 </code></pre>
-</div>
+    </div>
+  </li>
+</ul>
 
 
                 <hr>
@@ -260,18 +261,20 @@ int main() {
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="/2016/03/04/sicily11"
-                    data-title="Sicily shortest path in unweighted graph"
-                    data-url="/2016/03/04/sicily11/"
+                    data-thread-key="/2016/08/13/algorithm"
+                    data-title="满减优惠"
+                    data-url="/2016/08/13/algorithm/"
                     data-images="/img/home-bg.jpg"
                     data-content="
-  题目介绍：
+  
+    题目介绍:
 
+    时间限制:10000ms
+单点时限:1000ms
+内存限制:256MB
 
-输入一个无向图，指定一个顶点s开始bfs遍历，求出s到图中每个点的最短距离。
-
-如果不存在s到t的路径，则记s到t的距离为-1。
- ... | Winray | Winray Blog " >
+描述
+最近天气炎热，小Ho天天宅在家里叫外... | Winray | Winray Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -291,13 +294,9 @@ int main() {
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2016/03/04/sicily10/" data-toggle="tooltip" data-placement="top" title="Sicily connect components in undirected graph">&larr; Previous Post</a>
+                        <a href="/2016/03/15/thread/" data-toggle="tooltip" data-placement="top" title="进程间通信">&larr; Previous Post</a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2016/03/04/sicily12/" data-toggle="tooltip" data-placement="top" title="Sicily 1936. Knight Moves">Next Post &rarr;</a>
-                    </li>
                     
                 </ul>
 
@@ -306,9 +305,9 @@ int main() {
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="/2016/03/04/sicily11"
-                        data-title="Sicily shortest path in unweighted graph"
-                        data-url="/2016/03/04/sicily11/" >
+                        data-thread-key="/2016/08/13/algorithm"
+                        data-title="满减优惠"
+                        data-url="/2016/08/13/algorithm/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
